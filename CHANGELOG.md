@@ -5,6 +5,26 @@ package; recipe and report schemas are versioned independently while alpha.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-08
+
+### Added
+
+- Local one-file Project Brain with deterministic project inventory, typed relationship graph,
+  bounded search and agent context, durable decisions/failed attempts, and Rehearse run evidence.
+- Self-contained private HTML visualization with search, kind filters, deterministic clusters,
+  accessible node table, restrictive nonce-based CSP, and no network dependencies.
+- Ten evidence-backed review lenses spanning architecture, change impact, tests, reliability,
+  security, operability, licensing, privacy, UX, accessibility, and design consistency.
+- A complete `project-brain` Agent Skill with ten lens references and named skill installation.
+
+### Security
+
+- Added Git-aware streaming inventory limits, sensitive-path refusal, symlink and TOCTOU defenses,
+  graph/query/context bounds, exact SQLite schema validation, integrity checks, private atomic files,
+  and visualization escaping.
+- Defined outbound-data consent: credentials and API keys are never uploaded; other project or
+  personal/customer data requires explicit approval before transmission to an online service.
+
 ## [0.1.0] - 2026-11-08
 
 ### Added

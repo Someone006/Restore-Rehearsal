@@ -4,13 +4,22 @@ build-backend = "hatchling.build"
 
 [project]
 name = "restore-rehearsal"
-version = "0.1.0"
-description = "Rehearse Docker Compose restores and upgrades without touching production"
+version = "0.2.0"
+description = "Rehearse restores and upgrades, with a local one-file project evidence brain"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{ name = "Rehearse contributors" }]
-keywords = ["backup", "docker-compose", "disaster-recovery", "restore", "self-hosted"]
+keywords = [
+  "ai-agents",
+  "backup",
+  "code-analysis",
+  "dependency-graph",
+  "disaster-recovery",
+  "docker-compose",
+  "restore",
+  "self-hosted",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
@@ -49,3 +58,8 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/restore_rehearsal/brain/review.py" = ["E501"]
+"src/restore_rehearsal/brain/schema.py" = ["E501"]
+"src/restore_rehearsal/brain/visual.py" = ["E501"]

@@ -1,25 +1,28 @@
 # Rehearse
 
-**Prove that a Docker Compose backup can be restored and survive a candidate upgrade—without
-touching the production project.**
+**Rehearse recovery before production, and give people and AI agents a local evidence graph of the
+whole project.**
 
-Rehearse is an open-source disaster-recovery drill for stateful Compose applications. It restores
-a declared backup into fresh, isolated volumes using the current images, runs your checks, applies
-candidate image changes, runs the checks again, writes a share-safe report, and removes everything
-it created.
+Rehearse is an open-source, local-first CLI with two connected capabilities:
+
+- **Restore Rehearsal** restores a declared backup into a disposable Docker Compose stack, runs
+  checks before and after a candidate upgrade, records share-safe evidence, and removes its stack.
+- **Project Brain** scans a Git project without executing it and stores architecture, dependencies,
+  tests, deployment, recovery evidence, decisions, failed attempts, and review findings in one
+  private `.rrbrain` SQLite file with an offline visual graph.
 
 ```text
 read-only backup → isolated baseline → restore → checks → candidate images → checks → cleanup
 ```
 
 > [!IMPORTANT]
-> Rehearse is alpha software. A passed drill proves only that the supplied backup, recipe, images,
-> Compose definition, and checks worked in that rehearsal environment. It is not a guarantee of
-> complete recoverability and it never deploys to production.
+> Rehearse `0.2` is alpha software. It may be used commercially under Apache-2.0, but it should not
+> yet be the sole production release gate, disaster-recovery control, accessibility certification,
+> or legal/compliance decision. See [commercial readiness](docs/commercial-readiness.md).
 
 ## Who actually needs this?
 
-Not every project. The initial user is someone who:
+The restore executor is deliberately specialized. It is useful when someone:
 
 - runs stateful applications with Docker Compose;
 - already creates backups but has no realistic staging environment;
@@ -34,6 +37,18 @@ and Hacker News discussions about [self-hosting operational burden](https://news
 and [restore complexity in deployment platforms](https://news.ycombinator.com/item?id=43555996).
 Rehearse targets the narrow restore-drill gap; it is not another backup engine, updater, or container
 dashboard.
+
+Project Brain has a wider audience. Stateless applications still get architecture, change-impact,
+test, security, operability, license, privacy, UX, and accessibility evidence. For managed databases,
+the brain records the dependency and flags missing ownership, export/restore method, retention,
+RPO/RTO, and provider drill evidence. It does **not** pretend to restore a managed service until a
+real provider adapter performs that drill.
+
+The need for a project evidence graph is promising rather than proven. In one evaluation, the
+[Repository Intelligence Graph study](https://arxiv.org/abs/2601.10112) reported better agent
+accuracy and completion time from deterministic build/test evidence. The event-oriented memory is
+informed by [PROJECTMEM](https://arxiv.org/abs/2606.12329). Rehearse still needs feedback and field
+trials on real projects before stronger adoption claims are justified.
 
 ## Install as a standalone app
 
@@ -54,24 +69,68 @@ registries according to the recipe's `pull` policy.
 
 ## Install as an AI Agent Skill
 
-The same package includes a portable [`SKILL.md`](skills/restore-rehearsal/SKILL.md). Install it
-into an agent's project-level skill directory:
+The package includes two portable Agent Skills: [Restore Rehearsal](skills/restore-rehearsal/SKILL.md)
+and [Project Brain](skills/project-brain/SKILL.md). Install either into an agent's project-level
+skill directory:
 
 ```console
 # Codex / agents using the common .agents directory
-rehearse skill install .agents/skills
+rehearse skill install .agents/skills --name project-brain
 
 # Claude Code
-rehearse skill install .claude/skills
+rehearse skill install .claude/skills --name project-brain
 
 # GitHub Copilot
-rehearse skill install .github/skills
+rehearse skill install .github/skills --name project-brain
 ```
 
-The installer creates `restore-rehearsal/SKILL.md` below the selected directory and refuses to
-overwrite an existing skill. `rehearse skill show` prints the bundled skill for other agents. The
-skill teaches an agent to validate first, protect backup contents, avoid weakening refusals, and
-keep production rollout outside the rehearsal.
+Use `--name restore-rehearsal` for the recovery skill. `rehearse skill list` lists both bundles and
+`rehearse skill show --name project-brain` prints one for inspection. The installer includes all ten
+Project Brain lens references and refuses every overwrite.
+
+The agent guardrail is explicit: API keys, credentials, tokens, private keys, and backup contents
+must never be uploaded. Before an agent sends any other source, project metadata, or personal or
+customer information to an online service, it must explain the destination and scope and obtain
+the user's explicit approval. Local analysis does not need that approval.
+
+## Build the one-file Project Brain
+
+Run at the top of any Git project; Docker is not required:
+
+```console
+rehearse brain build . --output project.rrbrain
+rehearse brain summary project.rrbrain --json
+rehearse brain query project.rrbrain "database recovery" --json
+rehearse brain context project.rrbrain src/service.py --depth 2 --json
+rehearse brain findings project.rrbrain --json
+rehearse brain visualize project.rrbrain --output project-brain.html
+```
+
+The scanner honors Git ignore rules, inventories every remaining project file, parses common source,
+manifest, workflow, Compose, recipe, HTML, and style formats, and does not execute repository code.
+Known credential, key, environment, and backup paths are represented only as sensitive metadata and
+are never opened. Source bodies are used only during the bounded local scan; they are not persisted
+in the brain. The database stores relative paths, hashes, symbols, relationships, evidence, findings,
+explicit memories, and allowlisted run results. It contains no telemetry or remote calls.
+
+The ten evidence-backed review lenses are:
+
+1. Architecture Map
+2. Change Impact and Contracts
+3. Test Strategy and Verification
+4. Reliability and Recovery
+5. Security and Supply Chain
+6. Performance and Operability
+7. License and Attribution
+8. Privacy and Data Governance
+9. UX Flows and Product Content
+10. Accessibility and Design System
+
+This is not an Obsidian-style note-link graph: [Obsidian](https://obsidian.md/help/plugins/graph)
+is better for human-authored knowledge. It also does not claim deeper AST coverage than
+[Graphify](https://github.com/Graphify-Labs/graphify). Rehearse's distinct job is joining project
+topology to tests, recovery runs, prior failures, decisions, and review evidence. Read the full
+[Project Brain design and privacy model](docs/brain.md).
 
 ## Try the synthetic example
 
@@ -157,23 +216,29 @@ production; it is not a sandbox for hostile images or hostile recipes. Read the 
 
 ## Current scope
 
-Included in `0.1.0`:
+Included in `0.2.0`:
 
 - Docker Compose v2 on Linux;
 - file or directory backup inputs, always mounted read-only;
 - optional SHA-256 verification for backup files;
 - container command and health checks with bounded retries;
 - one candidate image set;
-- JSON reports with allowlisted fields; and
-- a portable Agent Skill.
+- JSON reports with allowlisted fields;
+- one-file Project Brain builds, bounded queries/context, durable memories, run import, and offline
+  visual graphs;
+- deterministic extractors for Git inventory, Python and JS/TS relationships, manifests, Compose,
+  GitHub Actions, tests, Rehearse recipes, static HTML accessibility, and CSS design tokens;
+- ten evidence-backed review lenses for engineering, recovery, design, legal issue-spotting, and
+  UI/UX; and
+- two installable Agent Skills with all lens references.
 
 Deliberately not included yet:
 
 - creating or scheduling backups;
 - automatic production deployment or rollback;
-- Kubernetes, Swarm, a web dashboard, or release-note parsing;
+- Kubernetes, Swarm, hosted dashboards, or release-note parsing;
 - implicit discovery of application-specific restore commands; or
-- support for every Compose feature.
+- support for every language, artifact format, cloud-provider restore API, or Compose feature.
 
 ## Development
 

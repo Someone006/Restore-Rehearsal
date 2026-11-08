@@ -15,3 +15,5 @@ dist/
 backups/
 rehearse-report*.json
 rehearse-workspace-*/
+*.rrbrain
+project-brain*.html

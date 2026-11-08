@@ -9,7 +9,7 @@ import pytest
 from restore_rehearsal.errors import EnvironmentError
 from restore_rehearsal.redaction import Redactor
 from restore_rehearsal.report import RunReport, write_report
-from restore_rehearsal.skill import install_skill, skill_text
+from restore_rehearsal.skill import SKILL_NAMES, install_skill, skill_text
 
 
 def test_redacts_known_values_paths_and_common_credentials(tmp_path: Path) -> None:
@@ -68,3 +68,32 @@ def test_repository_skill_matches_packaged_skill() -> None:
     repository_skill = Path(__file__).parents[1] / "skills" / "restore-rehearsal" / "SKILL.md"
 
     assert repository_skill.read_text(encoding="utf-8") == skill_text()
+
+
+def test_project_brain_skill_installs_all_ten_references(tmp_path: Path) -> None:
+    target = tmp_path / ".agents" / "skills"
+
+    install_skill(target, name="project-brain")
+    installed = target / "project-brain"
+
+    assert set(SKILL_NAMES) == {"restore-rehearsal", "project-brain"}
+    assert (installed / "SKILL.md").read_text(encoding="utf-8") == skill_text("project-brain")
+    assert len(list((installed / "references").glob("*.md"))) == 10
+
+
+def test_repository_project_brain_skill_matches_packaged_tree() -> None:
+    repository = Path(__file__).parents[1] / "skills" / "project-brain"
+    packaged = Path(__file__).parents[1] / "src" / "restore_rehearsal" / "skill" / "project-brain"
+
+    repository_files = {
+        path.relative_to(repository): path.read_bytes()
+        for path in repository.rglob("*")
+        if path.is_file()
+    }
+    packaged_files = {
+        path.relative_to(packaged): path.read_bytes()
+        for path in packaged.rglob("*")
+        if path.is_file()
+    }
+
+    assert repository_files == packaged_files
