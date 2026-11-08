@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.coverage
+.pytest_cache/
+.ruff_cache/
+.venv/
+build/
+dist/
+
+# Local configuration and recovery data must never be committed.
+.env
+.env.*
+!.env.example
+backups/
+rehearse-report*.json
+rehearse-workspace-*/

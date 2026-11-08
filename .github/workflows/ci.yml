@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install development dependencies
+        run: python -m pip install --disable-pip-version-check -e ".[dev]"
+
+      - name: Check formatting and lint
+        run: |
+          ruff format --check .
+          ruff check .
+
+      - name: Run unit tests
+        run: pytest -m "not docker"
+
+      - name: Build distributions
+        run: python -m build
+
+      - name: Smoke-test installed wheel
+        run: |
+          python -m pip install --disable-pip-version-check --force-reinstall dist/*.whl
+          rehearse --version
+
+      - name: Validate synthetic example
+        if: matrix.python-version == '3.12'
+        run: rehearse validate examples/minimal/rehearse.yaml --json

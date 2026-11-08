@@ -1,0 +1,14 @@
+services:
+  app:
+    image: alpine:3.20
+    command: ["sh", "-c", "while true; do sleep 3600; done"]
+    healthcheck:
+      test: ["CMD", "test", "-f", "/data/restored.txt"]
+      interval: 1s
+      timeout: 2s
+      retries: 10
+    volumes:
+      - app-data:/data
+
+volumes:
+  app-data: {}

@@ -1,0 +1,51 @@
+version: 1
+name: minimal
+
+compose:
+  files:
+    - compose.yaml
+  pull: missing
+  startup_timeout: 30
+
+backups:
+  - name: fixture
+    path: backup.txt
+    mounts:
+      - service: app
+        target: /rehearsal-input/backup.txt
+
+restore:
+  - name: restore-fixture
+    service: app
+    command:
+      - cp
+      - /rehearsal-input/backup.txt
+      - /data/restored.txt
+    timeout: 10
+
+candidate:
+  images:
+    app: alpine:3.21
+
+checks:
+  - name: restored-content
+    type: exec
+    service: app
+    command:
+      - grep
+      - -q
+      - known-good
+      - /data/restored.txt
+    timeout: 5
+    retries: 3
+    interval: 1
+
+  - name: container-health
+    type: health
+    service: app
+    timeout: 5
+    retries: 3
+    interval: 1
+
+safety:
+  allow_egress: false
