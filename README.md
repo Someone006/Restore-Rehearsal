@@ -54,7 +54,14 @@ trials on real projects before stronger adoption claims are justified.
 
 Requirements: Linux, Python 3.11 or newer, Docker Engine, and Docker Compose v2.
 
-From a clone of this repository:
+Install the tagged source release directly from GitHub:
+
+```console
+uv tool install "git+https://github.com/Someone006/Restore-Rehearsal.git@v0.2.0"
+rehearse --version
+```
+
+Or, from a clone of this repository:
 
 ```console
 uv tool install .
