@@ -28,23 +28,32 @@ The `.rrbrain` file contains structural metadata rather than source bodies:
 - allowlisted status from imported Rehearse reports.
 
 It excludes source bodies, environment values, backup contents, Git author identity, remote URLs,
-absolute project paths, and raw command output. Git ignore rules are honored, known credential/key/
-backup paths are never opened, symlinks are never followed, and scans have file and byte limits.
+absolute project paths, and raw command output. Git repositories use Git's ignore decisions and
+then apply nested `.rehearseignore` privacy exclusions; plain folders honor nested `.gitignore` and
+`.rehearseignore` files. Known credential/key/backup paths are never opened, symlinks are never
+followed, and scans have file, directory, depth, and byte limits.
 The database uses mode `0600`, no telemetry, no uploads, and no WAL sidecar. Treat the file as
 sensitive project metadata anyway; do not commit or share it casually.
 
-This is an outbound-data boundary, not a partial-project mode. Every Git-tracked or unignored file
-is inventoried locally within explicit size limits, and supported text formats are parsed for
-relationships. API keys, credentials, tokens, private keys, and backup contents must never be sent
-to an online service. Before sending any other project/source data or personal/customer information
-online, an agent must state the destination and scope and obtain explicit user approval.
+Place a `.rehearseignore` file in the selected root or a subdirectory to add Git-compatible privacy
+exclusions specifically for Project Brain. These exclusions also apply to Git-tracked paths. They
+control local analysis only; they do not remove a secret from Git history or replace a secret
+manager.
+
+This is an outbound-data boundary, not a partial-project mode. Every non-ignored file in the
+selected local project folder is inventoried within explicit size limits, and supported text formats
+are parsed for relationships. API keys, credentials, tokens, private keys, and backup contents must
+never be sent to an online service. Before sending any other project/source data or
+personal/customer information online, an agent must state the destination and scope and obtain
+explicit user approval.
 
 ## Commands
 
-Build or atomically update a brain at the top of a Git repository:
+Build or atomically update a brain for any local project folder:
 
 ```console
 rehearse brain build . --output project.rrbrain
+rehearse brain build /path/to/a/non-git-project --output project.rrbrain
 ```
 
 Query bounded evidence for people and agents:

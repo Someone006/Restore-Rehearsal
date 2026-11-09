@@ -288,15 +288,35 @@ def _security(graph: Graph, nodes: tuple[Node, ...], paths: dict[str, Node]) -> 
             node_key="project:root",
         )
     for node in nodes:
-        if node.kind == "sensitive-file" and node.properties.get("tracked"):
+        if node.kind == "sensitive-file":
+            tracked = bool(node.properties.get("tracked"))
+            inventory_mode = graph.metadata.get("inventory_mode", "git")
+            title = (
+                f"Sensitive-looking path is tracked: {node.name}"
+                if tracked
+                else f"Sensitive-looking path is present: {node.name}"
+            )
+            description = (
+                "The scanner intentionally did not read this version-controlled file because its "
+                "path resembles credentials, keys, or backups."
+                if tracked
+                else "The scanner intentionally did not read this local file because its path "
+                "resembles credentials, keys, or backups."
+            )
             _add(
                 graph,
                 lens="security-supply-chain",
-                rule="tracked-sensitive-path",
-                severity="critical",
-                title=f"Sensitive-looking path is tracked: {node.name}",
-                description="The scanner intentionally did not read this tracked file because its path resembles credentials, keys, or backups.",
-                remediation="Verify it contains no secret, remove it from history if needed, and use a secret manager or safe fixture.",
+                rule=("tracked-sensitive-path" if tracked else "local-sensitive-path-present"),
+                severity="critical" if tracked else "high",
+                title=title,
+                description=description,
+                remediation=(
+                    "Verify it contains no secret, remove it from version history if needed, and "
+                    "use a secret manager or safe fixture."
+                    if inventory_mode == "git" and tracked
+                    else "Verify it is intentionally inside the project, keep it out of online "
+                    "agent context, and use a secret manager or safe fixture."
+                ),
                 confidence="extracted",
                 node_key=node.key,
                 evidence_path=node.path,

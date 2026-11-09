@@ -60,6 +60,7 @@ def test_skill_install_creates_portable_skill_without_overwrite(tmp_path: Path) 
 
     assert installed.read_text(encoding="utf-8") == skill_text()
     assert "Never publish raw Compose" in installed.read_text(encoding="utf-8")
+    assert "backup contents must never be sent" in installed.read_text(encoding="utf-8")
     with pytest.raises(EnvironmentError, match="refusing to overwrite"):
         install_skill(target)
 

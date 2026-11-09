@@ -44,6 +44,8 @@ open-source projects. Before calling Rehearse stable, the project should have:
 - reproducible packaging and installed-artifact tests on every claimed platform; and
 - contribution provenance plus third-party attribution/NOTICE inventory.
 
+The current direct dependency licenses are listed in [the third-party inventory](../THIRD_PARTY.md).
+
 ## Project Brain in commercial repositories
 
 The brain is local and content-minimizing by default, but its graph can still reveal architecture,
@@ -55,7 +57,7 @@ file names, dependencies, findings, and deliberately recorded decisions. Commerc
 - never transmit API keys, credentials, tokens, private keys, or backup content to online services;
 - require explicit user approval, with destination and scope, before transmitting any other project
   or personal/customer data to an online service;
-- validate scanner limits and exclusions against repository policy; and
+- validate scanner limits and exclusions against project policy; and
 - treat license/privacy/accessibility findings as review queues for qualified people—not conclusions.
 
 The [W3C WCAG 2.2 Recommendation](https://www.w3.org/TR/WCAG22/) provides testable accessibility

@@ -60,7 +60,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     brain_commands = brain.add_subparsers(dest="brain_command", required=True)
     brain_build = brain_commands.add_parser(
-        "build", help="scan a Git repository and atomically build or update its brain"
+        "build", help="scan any local project folder and atomically build or update its brain"
     )
     brain_build.add_argument("root", nargs="?", type=Path, default=Path.cwd())
     brain_build.add_argument("--output", "-o", type=Path, default=Path("project.rrbrain"))

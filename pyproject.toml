@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "restore-rehearsal"
-version = "0.2.0"
+version = "0.2.1"
 description = "Rehearse restores and upgrades, with a local one-file project evidence brain"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -31,7 +31,7 @@ classifiers = [
   "Topic :: System :: Archiving :: Backup",
   "Topic :: System :: Systems Administration",
 ]
-dependencies = ["PyYAML>=6.0.2,<7"]
+dependencies = ["pathspec>=0.12,<1", "PyYAML>=6.0.2,<7"]
 
 [project.optional-dependencies]
 dev = [

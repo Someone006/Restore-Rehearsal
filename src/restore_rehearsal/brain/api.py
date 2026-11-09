@@ -65,7 +65,8 @@ def brain_summary(path: Path) -> dict[str, Any]:
             connection.execute(
                 "SELECT key, value FROM metadata WHERE key IN "
                 "('format', 'schema_version', 'generator_version', 'generated_at', "
-                "'semantic_digest', 'git_commit')"
+                "'semantic_digest', 'git_commit', 'inventory_mode', "
+                "'inventory_files', 'inventory_ignored_entries')"
             )
         )
         counts = {

@@ -5,6 +5,20 @@ package; recipe and report schemas are versioned independently while alpha.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-09
+
+### Changed
+
+- Project Brain now scans any dedicated local project folder; Git is optional and project
+  subdirectories inside larger repositories are supported.
+- Plain-folder discovery uses a deterministic, bounded filesystem walker with nested `.gitignore`
+  and `.rehearseignore` support, hidden-project-file coverage, cross-device refusal, and no symlink
+  following.
+- Git inventories now apply nested `.rehearseignore` privacy exclusions, including to tracked
+  paths.
+- Sensitive-looking local paths now create explicit findings even when no version-control metadata
+  exists, while their contents remain unread.
+
 ## [0.2.0] - 2026-11-08
 
 ### Added

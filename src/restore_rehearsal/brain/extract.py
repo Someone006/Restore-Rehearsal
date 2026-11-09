@@ -75,8 +75,10 @@ class AccessibilityParser(HTMLParser):
 def extract_graph(inventory: Inventory) -> Graph:
     graph = Graph(
         metadata={
-            "git_commit": inventory.commit or "unborn",
+            "git_commit": inventory.commit or ("unborn" if inventory.mode == "git" else "none"),
+            "inventory_mode": inventory.mode,
             "inventory_files": str(len(inventory.files)),
+            "inventory_ignored_entries": str(inventory.ignored_entries),
             "inventory_read_bytes": str(inventory.read_bytes),
             "unsafe_names_skipped": str(inventory.skipped_unsafe_names),
         }

@@ -8,9 +8,11 @@ from pathlib import Path
 
 import pytest
 
+from restore_rehearsal.brain import inventory as brain_inventory
 from restore_rehearsal.brain.api import (
     brain_context,
     brain_doctor,
+    brain_findings,
     brain_forget,
     brain_memories,
     brain_query,
@@ -27,6 +29,7 @@ from restore_rehearsal.errors import EnvironmentError, SafetyError
 IGNORED_CANARY = "SYNTHETIC_IGNORED_SECRET_CANARY"
 SENSITIVE_CANARY = "SYNTHETIC_TRACKED_KEY_CANARY"
 OUTSIDE_CANARY = "SYNTHETIC_OUTSIDE_SYMLINK_CANARY"
+LOCAL_SECRET_CANARY = "SYNTHETIC_LOCAL_API_SECRET_CANARY"
 
 
 @pytest.fixture
@@ -131,6 +134,135 @@ def test_build_query_context_and_deterministic_digest(
     assert not Path(f"{brain}-wal").exists()
     assert not Path(f"{brain}-shm").exists()
     assert not Path(f"{brain}-journal").exists()
+
+
+def test_plain_local_folder_builds_without_git_and_honors_ignore_files(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "plain-local-project"
+    root.mkdir()
+    _write(root / ".gitignore", "ignored-root.txt\n*.tmp\n!important.tmp\n")
+    _write(root / ".rehearseignore", "generated/\n")
+    _write(root / "README.md", "# Plain local project\n")
+    _write(root / "src" / ".gitignore", "private.py\n")
+    _write(root / "src" / "app.py", "from .util import helper\n")
+    _write(root / "src" / "util.py", "def helper():\n    return 1\n")
+    _write(root / "src" / "private.py", LOCAL_SECRET_CANARY)
+    _write(root / ".github" / "workflows" / "ci.yml", "jobs: {}\n")
+    _write(root / "ignored-root.txt", LOCAL_SECRET_CANARY)
+    _write(root / "cache.tmp", LOCAL_SECRET_CANARY)
+    _write(root / "important.tmp", "keep this project artifact\n")
+    _write(root / "generated" / "bundle.js", LOCAL_SECRET_CANARY)
+    _write(root / ".env.local", f"API_KEY={LOCAL_SECRET_CANARY}\n")
+    _write(root / ".aws" / "credentials", LOCAL_SECRET_CANARY)
+    outside = tmp_path / "outside-local.py"
+    _write(outside, f"VALUE = {OUTSIDE_CANARY!r}\n")
+    (root / "outside-link.py").symlink_to(outside)
+    brain = tmp_path / "plain-local.rrbrain"
+
+    first = build_brain(root, brain)
+    second = build_brain(root, brain)
+    summary = brain_summary(brain)
+    raw = brain.read_bytes()
+
+    assert first["semantic_digest"] == second["semantic_digest"]
+    assert summary["metadata"]["inventory_mode"] == "filesystem"
+    assert summary["metadata"]["git_commit"] == "none"
+    assert int(summary["metadata"]["inventory_ignored_entries"]) >= 4
+    assert brain_query(brain, "src/app.py")["nodes"]
+    assert brain_query(brain, "important.tmp")["nodes"]
+    assert brain_query(brain, ".github/workflows/ci.yml")["nodes"]
+    assert not brain_query(brain, "private.py")["nodes"]
+    assert not brain_query(brain, "ignored-root.txt")["nodes"]
+    assert not brain_query(brain, "generated/bundle.js")["nodes"]
+    assert LOCAL_SECRET_CANARY.encode() not in raw
+    assert OUTSIDE_CANARY.encode() not in raw
+    findings = brain_findings(brain, lens="security-supply-chain")
+    assert any("Sensitive-looking path is present" in item["title"] for item in findings)
+    assert all("is tracked" not in item["title"] for item in findings)
+
+
+def test_git_project_subdirectory_can_be_scanned(
+    brain_project: tuple[Path, Path], tmp_path: Path
+) -> None:
+    root, _ = brain_project
+    brain = tmp_path / "subdirectory.rrbrain"
+
+    build_brain(root / "src", brain)
+    summary = brain_summary(brain)
+
+    assert summary["metadata"]["inventory_mode"] == "git"
+    assert summary["metadata"]["git_commit"] == "unborn"
+    assert brain_query(brain, "app.py")["nodes"]
+    assert not brain_query(brain, "compose.yaml")["nodes"]
+
+
+def test_git_project_honors_root_and_nested_rehearseignore(
+    brain_project: tuple[Path, Path],
+) -> None:
+    root, brain = brain_project
+    existing_ignore = (root / ".gitignore").read_text(encoding="utf-8")
+    _write(root / ".gitignore", f"{existing_ignore}.rehearseignore\n")
+    _write(root / "private-for-brain" / "credentials.txt", LOCAL_SECRET_CANARY)
+    _write(root / "src" / "generated.py", LOCAL_SECRET_CANARY)
+    _git(root, "add", "-A")
+    _write(root / ".rehearseignore", "private-for-brain/\n")
+    _write(root / "src" / ".rehearseignore", "generated.py\n")
+
+    build_brain(root, brain)
+    summary = brain_summary(brain)
+    raw = brain.read_bytes()
+
+    assert summary["metadata"]["inventory_mode"] == "git"
+    assert int(summary["metadata"]["inventory_ignored_entries"]) >= 2
+    assert not brain_query(brain, "private-for-brain/credentials.txt")["nodes"]
+    assert not brain_query(brain, "src/generated.py")["nodes"]
+    assert LOCAL_SECRET_CANARY.encode() not in raw
+
+
+def test_git_project_tolerates_a_tracked_file_deleted_before_scan(
+    brain_project: tuple[Path, Path],
+) -> None:
+    root, brain = brain_project
+    deleted = root / "deleted-before-scan.py"
+    _write(deleted, "VALUE = 1\n")
+    _git(root, "add", "-A")
+    deleted.unlink()
+
+    build_brain(root, brain)
+
+    assert not brain_query(brain, "deleted-before-scan.py")["nodes"]
+
+
+def test_root_ignore_pattern_budget_is_enforced_before_compilation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = tmp_path / "ignore-budget-project"
+    root.mkdir()
+    _write(root / ".rehearseignore", "first.tmp\nsecond.tmp\n")
+    monkeypatch.setattr(brain_inventory, "MAX_IGNORE_PATTERNS", 1)
+
+    with pytest.raises(SafetyError, match="ignore rules exceed"):
+        build_brain(root, tmp_path / "ignore-budget.rrbrain")
+
+
+def test_plain_local_folder_does_not_require_git_executable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = tmp_path / "no-git-command-project"
+    root.mkdir()
+    _write(root / "app.py", "VALUE = 1\n")
+    brain = tmp_path / "no-git-command.rrbrain"
+    monkeypatch.setenv("PATH", str(tmp_path / "missing-bin"))
+
+    build_brain(root, brain)
+
+    assert brain_summary(brain)["metadata"]["inventory_mode"] == "filesystem"
+
+
+def test_filesystem_root_is_not_accepted_as_a_project(tmp_path: Path) -> None:
+    with pytest.raises(SafetyError, match="dedicated project directory"):
+        build_brain(Path("/"), tmp_path / "root.rrbrain")
 
 
 def test_memory_and_run_survive_atomic_rebuild(brain_project: tuple[Path, Path]) -> None:

@@ -4,7 +4,7 @@ description: Build and query a local one-file Rehearse project evidence graph be
 license: Apache-2.0
 compatibility: Requires Python 3.11+ and the rehearse CLI.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Rehearse Project Brain
@@ -15,7 +15,8 @@ attempts, verification gaps, or one of the ten review lenses in `references/`.
 ## Workflow
 
 1. If the brain is absent or stale, run `rehearse brain build . --output project.rrbrain` from the
-   Git repository root. Never weaken Git ignore rules or scan a parent directory to gain context.
+   selected local project root. Git is optional. Never weaken ignore rules or scan a parent
+   directory merely to gain more context.
 2. Start with `rehearse brain summary project.rrbrain --json` or a narrow
    `rehearse brain query project.rrbrain "QUESTION" --json`.
 3. Before editing, request only the relevant neighborhood with

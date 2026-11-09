@@ -7,7 +7,7 @@ Rehearse is an open-source, local-first CLI with two connected capabilities:
 
 - **Restore Rehearsal** restores a declared backup into a disposable Docker Compose stack, runs
   checks before and after a candidate upgrade, records share-safe evidence, and removes its stack.
-- **Project Brain** scans a Git project without executing it and stores architecture, dependencies,
+- **Project Brain** scans any local project folder without executing it and stores architecture,
   tests, deployment, recovery evidence, decisions, failed attempts, and review findings in one
   private `.rrbrain` SQLite file with an offline visual graph.
 
@@ -52,12 +52,13 @@ trials on real projects before stronger adoption claims are justified.
 
 ## Install as a standalone app
 
-Requirements: Linux, Python 3.11 or newer, Docker Engine, and Docker Compose v2.
+Project Brain requires Python 3.11 or newer; it does not require Git or Docker. Restore rehearsals
+additionally require Linux, Docker Engine, and Docker Compose v2.
 
 Install the tagged source release directly from GitHub:
 
 ```console
-uv tool install "git+https://github.com/Someone006/Restore-Rehearsal.git@v0.2.0"
+uv tool install "git+https://github.com/Someone006/Restore-Rehearsal.git@v0.2.1"
 rehearse --version
 ```
 
@@ -102,7 +103,7 @@ the user's explicit approval. Local analysis does not need that approval.
 
 ## Build the one-file Project Brain
 
-Run at the top of any Git project; Docker is not required:
+Run inside any local project folder, or pass its path; neither Git nor Docker is required:
 
 ```console
 rehearse brain build . --output project.rrbrain
@@ -113,8 +114,12 @@ rehearse brain findings project.rrbrain --json
 rehearse brain visualize project.rrbrain --output project-brain.html
 ```
 
-The scanner honors Git ignore rules, inventories every remaining project file, parses common source,
-manifest, workflow, Compose, recipe, HTML, and style formats, and does not execute repository code.
+When Git is present, the scanner uses its exact tracked/unignored inventory and then applies nested
+`.rehearseignore` privacy exclusions. For an ordinary local folder, it performs a deterministic
+bounded filesystem walk and honors nested `.gitignore` and `.rehearseignore` files. It keeps hidden
+project configuration, never follows symlinks, inventories every remaining project file, parses
+common source, manifest, workflow, Compose, recipe, HTML, and style formats, and does not execute
+project code.
 Known credential, key, environment, and backup paths are represented only as sensitive metadata and
 are never opened. Source bodies are used only during the bounded local scan; they are not persisted
 in the brain. The database stores relative paths, hashes, symbols, relationships, evidence, findings,
@@ -223,7 +228,7 @@ production; it is not a sandbox for hostile images or hostile recipes. Read the 
 
 ## Current scope
 
-Included in `0.2.0`:
+Included in `0.2.1`:
 
 - Docker Compose v2 on Linux;
 - file or directory backup inputs, always mounted read-only;
@@ -233,8 +238,9 @@ Included in `0.2.0`:
 - JSON reports with allowlisted fields;
 - one-file Project Brain builds, bounded queries/context, durable memories, run import, and offline
   visual graphs;
-- deterministic extractors for Git inventory, Python and JS/TS relationships, manifests, Compose,
-  GitHub Actions, tests, Rehearse recipes, static HTML accessibility, and CSS design tokens;
+- deterministic extractors for Git or filesystem inventory, Python and JS/TS relationships,
+  manifests, Compose, GitHub Actions, tests, Rehearse recipes, static HTML accessibility, and CSS
+  design tokens;
 - ten evidence-backed review lenses for engineering, recovery, design, legal issue-spotting, and
   UI/UX; and
 - two installable Agent Skills with all lens references.
@@ -254,8 +260,9 @@ make setup
 make check
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and the
-[changelog](CHANGELOG.md). Restore procedures are application-specific, so small, synthetic
-integration recipes are especially valuable contributions.
+See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), the
+[third-party dependency inventory](THIRD_PARTY.md), and the [changelog](CHANGELOG.md). Restore
+procedures are application-specific, so small, synthetic integration recipes are especially
+valuable contributions.
 
 Licensed under Apache-2.0.
