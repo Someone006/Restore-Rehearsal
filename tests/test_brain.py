@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import stat
 import subprocess
@@ -215,6 +216,27 @@ def test_open_file_stat_matching_and_windows_binary_flag(
     assert not brain_inventory._stat_matches_open_file(expected, wrong_size)
     monkeypatch.setattr(brain_inventory.os, "O_BINARY", 1 << 28, raising=False)
     assert brain_inventory._read_only_flags() & (1 << 28)
+
+
+def test_brain_fsync_reopens_owned_temporary_file_writable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "brain.tmp"
+    target.write_bytes(b"sqlite placeholder")
+    opened_flags: list[int] = []
+    original_open = brain_inventory.os.open
+
+    def recording_open(path: str | bytes | Path, flags: int, mode: int = 0o777) -> int:
+        opened_flags.append(flags)
+        return original_open(path, flags, mode)
+
+    from restore_rehearsal.brain import store as brain_store
+
+    monkeypatch.setattr(brain_store.os, "open", recording_open)
+    brain_store._fsync_file(target)
+
+    assert opened_flags
+    assert opened_flags[0] & os.O_RDWR
 
 
 def test_git_project_subdirectory_can_be_scanned(

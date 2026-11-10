@@ -1499,7 +1499,8 @@ def _now() -> str:
 
 
 def _fsync_file(path: Path) -> None:
-    descriptor = os.open(path, os.O_RDONLY)
+    flags = os.O_RDWR | int(getattr(os, "O_BINARY", 0))
+    descriptor = os.open(path, flags)
     try:
         os.fsync(descriptor)
     finally:
