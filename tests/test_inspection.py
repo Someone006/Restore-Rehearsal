@@ -63,6 +63,21 @@ def test_web_plan_removes_query_fragment_and_refuses_embedded_credentials() -> N
         build_inspection_plan("https://user:password@example.invalid/app")
 
 
+def test_windows_drive_target_is_local_and_privacy_minimized() -> None:
+    plan = build_inspection_plan(r"D:\private-parent\project\app.py", surface="code")
+
+    assert plan["target"] == {"kind": "local", "label": "app.py", "location": "app.py"}
+    assert "private-parent" not in str(plan)
+
+
+def test_explicit_non_http_url_is_refused_but_colon_filename_is_local() -> None:
+    with pytest.raises(SafetyError, match=r"HTTP\(S\)"):
+        build_inspection_plan("ftp://example.invalid/project")
+
+    plan = build_inspection_plan("design:notes.md", surface="docs")
+    assert plan["target"]["kind"] == "local"
+
+
 def test_private_report_round_trip_refuses_overwrite(tmp_path: Path) -> None:
     plan = build_inspection_plan("guide.md")
     captured_at = plan["created_at"]

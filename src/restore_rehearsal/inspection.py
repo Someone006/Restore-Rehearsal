@@ -15,7 +15,7 @@ import stat
 import tempfile
 import unicodedata
 from datetime import UTC, datetime
-from pathlib import Path, PurePosixPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
@@ -504,9 +504,10 @@ def _target_descriptor(target: str | Path) -> tuple[dict[str, str], str]:
     if any(unicodedata.category(character).startswith("C") for character in raw):
         raise SafetyError("inspection target contains unsafe characters")
     parsed = urlsplit(raw)
-    if parsed.scheme:
+    scheme = parsed.scheme.lower()
+    if scheme in {"http", "https"} or "://" in raw:
         if (
-            parsed.scheme not in {"http", "https"}
+            scheme not in {"http", "https"}
             or not parsed.hostname
             or parsed.username
             or parsed.password
@@ -519,12 +520,16 @@ def _target_descriptor(target: str | Path) -> tuple[dict[str, str], str]:
         _text(safe_url, "inspection URL", 1_000)
         return {"kind": "url", "label": parsed.hostname, "location": safe_url}, "web"
     path = Path(raw).expanduser()
-    try:
-        relative = path.resolve(strict=False).relative_to(Path.cwd().resolve()).as_posix()
-    except (OSError, ValueError):
-        relative = path.name or "."
+    windows_path = PureWindowsPath(raw)
+    if os.name != "nt" and windows_path.is_absolute():
+        relative = windows_path.name or "."
+    else:
+        try:
+            relative = path.resolve(strict=False).relative_to(Path.cwd().resolve()).as_posix()
+        except (OSError, ValueError):
+            relative = path.name or "."
     _relative_path(relative, "inspection target path")
-    suffix = path.suffix.lower()
+    suffix = windows_path.suffix.lower() if windows_path.is_absolute() else path.suffix.lower()
     detected = "mixed" if not suffix else "code"
     if suffix in {".md", ".mdx", ".rst", ".adoc", ".html", ".htm"}:
         detected = "docs"
@@ -532,7 +537,8 @@ def _target_descriptor(target: str | Path) -> tuple[dict[str, str], str]:
         detected = "data"
     elif suffix in {".apk", ".app", ".desktop", ".exe", ".ipa", ".msi"}:
         detected = "native"
-    return {"kind": "local", "label": path.name or "project", "location": relative}, detected
+    label = windows_path.name if windows_path.is_absolute() else path.name
+    return {"kind": "local", "label": label or "project", "location": relative}, detected
 
 
 def _validate_target(value: Any) -> None:
