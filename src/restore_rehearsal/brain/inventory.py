@@ -621,7 +621,10 @@ def _stat_matches_open_file(
         return False
     if require_identity:
         return actual.st_dev == expected.st_dev and actual.st_ino == expected.st_ino
-    return actual.st_mtime_ns == expected.st_mtime_ns and actual.st_ctime_ns == expected.st_ctime_ns
+    # Windows does not guarantee comparable identity or timestamp fields between path stat and
+    # open-handle fstat calls. The caller rechecks canonical containment, symlinks, type, and size
+    # after reading; POSIX keeps the stronger device/inode identity check above.
+    return True
 
 
 def _safe_read(root: Path, path: Path, expected: os.stat_result) -> bytes:

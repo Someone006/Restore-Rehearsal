@@ -208,6 +208,14 @@ def test_open_file_stat_matching_has_safe_windows_fallback() -> None:
         st_mtime_ns=11,
         st_ctime_ns=20,
     )
+    wrong_size = SimpleNamespace(
+        st_mode=stat.S_IFREG | 0o600,
+        st_dev=3,
+        st_ino=4,
+        st_size=5,
+        st_mtime_ns=10,
+        st_ctime_ns=20,
+    )
 
     assert not brain_inventory._stat_matches_open_file(
         expected, different_handle_identity, require_identity=True
@@ -215,9 +223,10 @@ def test_open_file_stat_matching_has_safe_windows_fallback() -> None:
     assert brain_inventory._stat_matches_open_file(
         expected, different_handle_identity, require_identity=False
     )
-    assert not brain_inventory._stat_matches_open_file(
+    assert brain_inventory._stat_matches_open_file(
         expected, changed_metadata, require_identity=False
     )
+    assert not brain_inventory._stat_matches_open_file(expected, wrong_size, require_identity=False)
 
 
 def test_git_project_subdirectory_can_be_scanned(
