@@ -4,12 +4,13 @@ build-backend = "hatchling.build"
 
 [project]
 name = "restore-rehearsal"
-version = "0.2.1"
-description = "Rehearse restores and upgrades, with a local one-file project evidence brain"
+version = "0.3.0"
+description = "Local project evidence, inspection, and isolated restore rehearsals for people and AI agents"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{ name = "Rehearse contributors" }]
+license-files = ["LICENSE"]
 keywords = [
   "ai-agents",
   "backup",
@@ -28,10 +29,17 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Typing :: Typed",
   "Topic :: System :: Archiving :: Backup",
   "Topic :: System :: Systems Administration",
 ]
 dependencies = ["pathspec>=0.12,<1", "PyYAML>=6.0.2,<7"]
+
+[project.urls]
+Homepage = "https://github.com/Someone006/Restore-Rehearsal"
+Documentation = "https://github.com/Someone006/Restore-Rehearsal#readme"
+Issues = "https://github.com/Someone006/Restore-Rehearsal/issues"
+Source = "https://github.com/Someone006/Restore-Rehearsal"
 
 [project.optional-dependencies]
 dev = [
@@ -49,6 +57,7 @@ packages = ["src/restore_rehearsal"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --strict-markers"
+pythonpath = [".", "src"]
 testpaths = ["tests"]
 markers = ["docker: requires a local Docker daemon and preloaded images"]
 

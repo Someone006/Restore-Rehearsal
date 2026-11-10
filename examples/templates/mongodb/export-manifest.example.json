@@ -1,0 +1,8 @@
+{
+  "schema": "rehearse.dev/local-export-hint/v1",
+  "engine": "mongodb",
+  "format": "mongodump-archive",
+  "artifact": "synthetic-mongodb.archive",
+  "database_placeholder": "REVIEW_REQUIRED",
+  "source": "synthetic-only"
+}

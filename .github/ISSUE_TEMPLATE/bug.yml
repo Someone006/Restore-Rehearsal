@@ -1,0 +1,57 @@
+name: Bug report
+description: Report a reproducible defect using synthetic or redacted inputs.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Do not paste API keys, credentials, private source, customer information, or backup contents.
+        Use GitHub private vulnerability reporting for security issues.
+  - type: input
+    id: version
+    attributes:
+      label: Rehearse version
+      placeholder: rehearse 0.3.0
+    validations:
+      required: true
+  - type: dropdown
+    id: capability
+    attributes:
+      label: Capability
+      options:
+        - Project Brain
+        - Restore rehearsal
+        - Agent Skill
+        - Importer or adapter
+        - Packaging or installation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Synthetic reproduction
+      description: Include minimal safe commands and generated fixtures; redact absolute paths.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and observed behavior
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform and Python version
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I removed secrets, private source, customer data, personal information, and backups.
+          required: true

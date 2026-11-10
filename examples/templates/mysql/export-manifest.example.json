@@ -1,0 +1,8 @@
+{
+  "schema": "rehearse.dev/local-export-hint/v1",
+  "engine": "mysql",
+  "format": "logical-sql",
+  "artifact": "synthetic-mysql.sql",
+  "database_placeholder": "REVIEW_REQUIRED",
+  "source": "synthetic-only"
+}

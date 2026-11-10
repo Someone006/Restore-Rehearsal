@@ -95,3 +95,86 @@ jobs:
         env:
           RUN_DOCKER_TESTS: "1"
         run: pytest -m docker
+
+  container-smoke:
+    name: Non-root brain container
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Build wheel and container
+        run: |
+          python -m pip install --disable-pip-version-check build
+          python -m build
+          docker build --build-arg VERSION=ci --build-arg REVISION="${GITHUB_SHA}" --tag rehearse:ci .
+
+      - name: Exercise the non-root image without the Docker socket
+        run: |
+          test "$(docker image inspect rehearse:ci --format '{{.Config.User}}')" = "65532:65532"
+          docker run --rm --network none rehearse:ci --version
+          docker run --rm --network none --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid,size=16m \
+            --tmpfs /work:rw,noexec,nosuid,size=128m,mode=1777 \
+            --volume "${PWD}:/project:ro" rehearse:ci \
+            brain build /project --output /work/project.rrbrain --json
+
+  portable-brain:
+    name: Brain-only ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-15
+          - windows-2025
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Build and install wheel
+        run: |
+          python -m pip install --disable-pip-version-check build
+          python -m build
+          python -m pip install --disable-pip-version-check --force-reinstall dist/*.whl
+        shell: bash
+
+      - name: Exercise a plain local project and bundled skills
+        env:
+          PLAIN_PROJECT: ${{ runner.temp }}/rehearse-plain-project
+          BRAIN_PATH: ${{ runner.temp }}/portable.rrbrain
+          VISUAL_PATH: ${{ runner.temp }}/portable-brain.html
+          INSPECTION_PATH: ${{ runner.temp }}/inspection-plan.json
+        run: |
+          python -c "import os; from pathlib import Path; p=Path(os.environ['PLAIN_PROJECT']); p.mkdir(); (p/'app.py').write_text('VALUE = 1\n', encoding='utf-8')"
+          rehearse --version
+          rehearse skill list
+          rehearse skill doctor --json
+          rehearse init "$PLAIN_PROJECT" --json
+          rehearse brain build "$PLAIN_PROJECT" --output "$BRAIN_PATH" --json
+          rehearse brain query "$BRAIN_PATH" app.py --json
+          rehearse brain visualize "$BRAIN_PATH" --output "$VISUAL_PATH" --json
+          rehearse brain doctor "$BRAIN_PATH" --json
+          rehearse inspect plan "$PLAIN_PROJECT" --surface code --output "$INSPECTION_PATH" --json
+          rehearse inspect validate "$INSPECTION_PATH" --json
+          rehearse adapters list --json
+          rehearse plugin list --builtins-only --json
+        shell: bash

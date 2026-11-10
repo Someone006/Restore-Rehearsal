@@ -1,0 +1,8 @@
+{
+  "schema": "rehearse.dev/local-export-hint/v1",
+  "engine": "sqlite",
+  "format": "database-file",
+  "artifact": "synthetic.sqlite3",
+  "required_check": "PRAGMA quick_check",
+  "source": "synthetic-only"
+}

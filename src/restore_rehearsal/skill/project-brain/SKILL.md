@@ -4,7 +4,7 @@ description: Build and query a local one-file Rehearse project evidence graph be
 license: Apache-2.0
 compatibility: Requires Python 3.11+ and the rehearse CLI.
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # Rehearse Project Brain
@@ -51,6 +51,14 @@ attempts, verification gaps, or one of the ten review lenses in `references/`.
   full WCAG evaluation.
 - Do not claim the brain is more complete than Graphify or another parser. Graphify importing is a
   planned integration; broad AST coverage is not part of this skill.
+
+Use the evidence guide for the relevant lens: [architecture](references/architecture.md),
+[change impact](references/change-impact.md), [test strategy](references/test-strategy.md),
+[reliability and recovery](references/reliability-recovery.md),
+[security and supply chain](references/security-supply-chain.md),
+[performance and operability](references/performance-operability.md),
+[license attribution](references/license-attribution.md), [privacy and data](references/privacy-data.md),
+[UX flow](references/ux-flow.md), or [accessibility and design](references/accessibility-design.md).
 
 Use `rehearse brain lenses` to list the bundled baseline and
 `rehearse brain doctor project.rrbrain --json` to validate the one-file format.

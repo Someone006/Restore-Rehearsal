@@ -1,0 +1,9 @@
+{
+  "schema": "rehearse.dev/local-export-hint/v1",
+  "engine": "object-storage",
+  "format": "local-directory",
+  "artifact": "synthetic-objects/",
+  "bucket_placeholder": "REVIEW_REQUIRED",
+  "expected_object_count": 0,
+  "source": "synthetic-only"
+}

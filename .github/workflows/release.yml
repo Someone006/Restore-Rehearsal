@@ -1,0 +1,209 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing version tag to verify and package, such as v0.3.0
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Reproducible distributions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - name: Check out the selected tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event_name == 'push' && github.ref || inputs.version }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Resolve and verify version
+        id: version
+        shell: bash
+        env:
+          REQUESTED_TAG: ${{ github.event_name == 'push' && github.ref_name || inputs.version }}
+        run: |
+          case "$REQUESTED_TAG" in
+            v[0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "release tag must look like vMAJOR.MINOR.PATCH" >&2; exit 2 ;;
+          esac
+          package_version="$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          test "v${package_version}" = "$REQUESTED_TAG"
+          git rev-parse --verify "refs/tags/${REQUESTED_TAG}^{commit}" >/dev/null
+          echo "version=${package_version}" >> "$GITHUB_OUTPUT"
+          echo "tag=${REQUESTED_TAG}" >> "$GITHUB_OUTPUT"
+          echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - name: Install build and test dependencies
+        run: python -m pip install --disable-pip-version-check -e ".[dev]"
+
+      - name: Run release tests
+        run: pytest -m "not docker"
+
+      - name: Build twice and compare hashes
+        run: >-
+          python -m scripts.reproducible_build
+          --project-root .
+          --output release
+          --expected-version "${{ steps.version.outputs.version }}"
+
+      - name: Generate the pinned Homebrew formula
+        run: >-
+          python -m scripts.generate_homebrew_formula
+          --project-root .
+          --sdist "release/restore_rehearsal-${{ steps.version.outputs.version }}.tar.gz"
+          --url "https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.tag }}/restore_rehearsal-${{ steps.version.outputs.version }}.tar.gz"
+          --version "${{ steps.version.outputs.version }}"
+          --output release/restore-rehearsal.rb
+
+      - name: Generate checksums and software bills of materials
+        run: python -m scripts.generate_release_metadata --project-root . --artifacts release
+
+      - name: Verify every release checksum
+        working-directory: release
+        run: sha256sum --check SHA256SUMS
+
+      - name: Smoke-test the wheel
+        shell: bash
+        run: |
+          python -m pip install --disable-pip-version-check --force-reinstall release/*.whl
+          rehearse --version
+          rehearse skill list
+
+      - name: Upload immutable release bundle
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release-${{ steps.version.outputs.version }}
+          path: release/*
+          if-no-files-found: error
+          retention-days: 30
+
+  attest:
+    name: Attest release bundle
+    needs: build
+    if: startsWith(needs.build.outputs.tag, 'v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Download release bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-${{ needs.build.outputs.version }}
+          path: release
+
+      - name: Create GitHub build provenance
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
+        with:
+          subject-path: release/*
+
+  github-release:
+    name: Publish GitHub prerelease
+    needs: [build, attest]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download release bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-${{ needs.build.outputs.version }}
+          path: release
+
+      - name: Create or update the prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.build.outputs.tag }}
+        shell: bash
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --verify-tag --prerelease --generate-notes
+          gh release upload "$TAG" release/* --clobber
+
+  pypi:
+    name: Publish to PyPI through trusted publishing
+    needs: [build, attest]
+    if: >-
+      github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') &&
+      vars.REHEARSE_PYPI_PUBLISH == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: release
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download release bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-${{ needs.build.outputs.version }}
+          path: dist
+
+      - name: Remove non-Python release files
+        shell: bash
+        run: find dist -type f ! -name '*.whl' ! -name '*.tar.gz' -delete
+
+      - name: Publish with PyPI OIDC
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
+
+  ghcr:
+    name: Publish brain-only container
+    needs: [build, attest]
+    if: >-
+      github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') &&
+      vars.REHEARSE_GHCR_PUBLISH == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: release
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.build.outputs.tag }}
+
+      - name: Download release bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-${{ needs.build.outputs.version }}
+          path: dist
+
+      - name: Build and push immutable container tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+          IMAGE: ghcr.io/${{ github.repository_owner }}/restore-rehearsal
+          VERSION: ${{ needs.build.outputs.version }}
+        shell: bash
+        run: |
+          echo "$GH_TOKEN" | docker login ghcr.io --username "${{ github.actor }}" --password-stdin
+          docker build --build-arg VERSION="$VERSION" --build-arg REVISION="${{ github.sha }}" --build-arg PACKAGE_VERSION="$VERSION" --tag "$IMAGE:$VERSION" --tag "$IMAGE:latest" .
+          docker push "$IMAGE:$VERSION"
+          docker push "$IMAGE:latest"

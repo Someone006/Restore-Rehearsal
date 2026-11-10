@@ -77,7 +77,8 @@ def test_project_brain_skill_installs_all_ten_references(tmp_path: Path) -> None
     install_skill(target, name="project-brain")
     installed = target / "project-brain"
 
-    assert set(SKILL_NAMES) == {"restore-rehearsal", "project-brain"}
+    assert {"restore-rehearsal", "project-brain"} <= set(SKILL_NAMES)
+    assert len(SKILL_NAMES) == 9
     assert (installed / "SKILL.md").read_text(encoding="utf-8") == skill_text("project-brain")
     assert len(list((installed / "references").glob("*.md"))) == 10
 

@@ -1,0 +1,35 @@
+name: Feature proposal
+description: Propose a local-first feature or integration.
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Describe the workflow and evidence that the need is recurring.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Include CLI, file-format, safety, privacy, and compatibility implications.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and related tools
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Boundaries
+      options:
+        - label: The proposal does not require uploading credentials, API keys, private keys, or backups.
+          required: true
+        - label: Any other outbound project or personal data is clearly identified with destination and scope.
+          required: true

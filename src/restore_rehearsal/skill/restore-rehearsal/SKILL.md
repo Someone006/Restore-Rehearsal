@@ -4,7 +4,7 @@ description: Safely validate and run disposable Docker Compose backup restore an
 license: Apache-2.0
 compatibility: Requires Python 3.11+, Docker Compose v2, and the rehearse CLI.
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # Restore Rehearsal

@@ -5,6 +5,62 @@ package; recipe and report schemas are versioned independently while alpha.
 
 ## [Unreleased]
 
+No changes yet.
+
+## [0.3.0] - 2026-11-10
+
+### Added
+
+- Added safe static project initialization with `rehearse init`, dry-run previews, existing-config
+  checks, project-stack detection, and private no-overwrite starter files.
+- Upgraded Project Brain to schema version 2 with bounded structural snapshots, deterministic
+  diffs, relationship-derived impact analysis, duplicate-snapshot suppression, atomic migration
+  from version 1, and preserved memories and run evidence across rebuilds.
+- Added persistent normalized evidence imports for SARIF, CycloneDX/SPDX SBOM, JUnit,
+  LCOV/Cobertura, OpenAPI/Swagger, Terraform, Kubernetes, and CI/check artifacts.
+- Added Graph, Changes, Findings, Recovery, Evidence, and Timeline views to the self-contained
+  offline visualization, with accessible navigation and bounded filters.
+- Added a local newline-JSON stdio MCP server with bounded Project Brain and recovery-adapter tools;
+  it is read-only by default and can optionally expose validated memory writes.
+- Added non-executing recovery-adapter detection and proposals for PostgreSQL, MySQL/MariaDB,
+  SQLite, MongoDB, object-storage exports, and managed-service export handoff.
+- Added universal inspection plan/report schemas for web, native/mobile, CLI/TUI, API, code,
+  documentation, data, and mixed projects, including local evidence digest verification.
+- Added a typed plugin API and registry for analyzers, artifact importers, and restore providers.
+  Installed entry-point metadata is inspectable without loading code; execution requires explicit
+  activation of one exact trusted plugin.
+- Expanded the installable Agent Skill set from two to nine with `rehearse-init`,
+  `universal-inspector`, `change-impact`, `evidence-import`, `recovery-adapters`,
+  `release-readiness`, and `plugin-authoring`.
+- Added synthetic project/recovery templates, deterministic benchmark tooling, a compatibility and
+  support policy, release metadata and reproducible-build tools, Homebrew formula generation, and a
+  non-root brain-only container definition.
+- Added pinned release/security workflows for checksums, CycloneDX/SPDX SBOMs, build provenance,
+  CodeQL, dependency review, and dependency auditing. External PyPI and GHCR publication remains
+  separately gated by repository administration.
+
+### Changed
+
+- Broadened the local evidence workflow beyond source repositories: ordinary non-Git project
+  folders, applications, APIs, documentation, data, and mixed digital projects now have explicit
+  initialization and inspection paths.
+- The offline HTML export now presents history, imported evidence, recovery coverage, memories,
+  and rehearsal runs without remote assets or network access.
+- Skill installation now supports selection, atomic `--all` installation, catalog output, and a
+  bundled-file doctor while preserving no-overwrite behavior.
+
+### Security
+
+- Added bounded XML, YAML, JSON, artifact, snapshot, import, MCP, inspection, and plugin metadata
+  handling with traversal, symlink, entity, alias, secret-canary, and payload-size refusals.
+- Evidence importers discard raw logs, environment values, source bodies, Terraform values,
+  Kubernetes Secret/ConfigMap data, OpenAPI examples/security values, and SBOM external URLs.
+- Recovery detection reads bounded local path metadata only and never contacts a provider,
+  database, bucket, or environment credential source.
+- Clarified the outbound-data rule: API keys, credentials, tokens, private keys, and backups are
+  never uploaded; any other project, report, screenshot, personal, or customer data requires the
+  user's explicit approval for a named destination and scope.
+
 ## [0.2.1] - 2026-11-09
 
 ### Changed

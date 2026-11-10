@@ -149,7 +149,7 @@ mounts read-only. The safer option is usually to declare an explicit backup moun
 2. Render, validate, and rewrite the Compose model.
 3. Start restore services on current images and execute restore steps.
 4. Start the full baseline and run checks.
-5. apply candidate images to the same isolated data and run checks.
+5. Apply candidate images to the same isolated data and run checks.
 6. Verify resource ownership labels and clean up.
 
 | Code | Meaning |

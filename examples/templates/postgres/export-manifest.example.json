@@ -1,0 +1,8 @@
+{
+  "schema": "rehearse.dev/local-export-hint/v1",
+  "engine": "postgresql",
+  "format": "pg-custom",
+  "artifact": "synthetic-postgres.backup",
+  "database_placeholder": "REVIEW_REQUIRED",
+  "source": "synthetic-only"
+}
