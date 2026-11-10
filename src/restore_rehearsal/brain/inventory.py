@@ -611,6 +611,19 @@ def _may_parse_text(value: str) -> bool:
     return Path(name).suffix in TEXT_SUFFIXES
 
 
+def _stat_matches_open_file(
+    expected: os.stat_result,
+    actual: os.stat_result,
+    *,
+    require_identity: bool,
+) -> bool:
+    if not stat.S_ISREG(actual.st_mode) or actual.st_size != expected.st_size:
+        return False
+    if require_identity:
+        return actual.st_dev == expected.st_dev and actual.st_ino == expected.st_ino
+    return actual.st_mtime_ns == expected.st_mtime_ns and actual.st_ctime_ns == expected.st_ctime_ns
+
+
 def _safe_read(root: Path, path: Path, expected: os.stat_result) -> bytes:
     try:
         resolved = path.resolve(strict=True)
@@ -637,12 +650,8 @@ def _safe_read(root: Path, path: Path, expected: os.stat_result) -> bytes:
         raise SafetyError("project file changed during brain inventory") from exc
     try:
         actual = os.fstat(descriptor)
-        if (
-            not stat.S_ISREG(actual.st_mode)
-            or actual.st_dev != expected.st_dev
-            or actual.st_ino != expected.st_ino
-            or actual.st_size != expected.st_size
-        ):
+        require_identity = os.name != "nt"
+        if not _stat_matches_open_file(expected, actual, require_identity=require_identity):
             raise SafetyError("project file changed during brain inventory")
         chunks: list[bytes] = []
         remaining = actual.st_size
@@ -652,6 +661,17 @@ def _safe_read(root: Path, path: Path, expected: os.stat_result) -> bytes:
                 raise SafetyError("project file changed during brain inventory")
             chunks.append(chunk)
             remaining -= len(chunk)
+        try:
+            resolved_after = path.resolve(strict=True)
+            current = path.lstat()
+        except OSError as exc:
+            raise SafetyError("project file changed during brain inventory") from exc
+        if (
+            not resolved_after.is_relative_to(root)
+            or stat.S_ISLNK(current.st_mode)
+            or not _stat_matches_open_file(current, actual, require_identity=require_identity)
+        ):
+            raise SafetyError("project file changed during brain inventory")
         return b"".join(chunks)
     finally:
         os.close(descriptor)

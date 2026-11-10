@@ -5,6 +5,7 @@ import sqlite3
 import stat
 import subprocess
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -180,6 +181,43 @@ def test_plain_local_folder_builds_without_git_and_honors_ignore_files(
     findings = brain_findings(brain, lens="security-supply-chain")
     assert any("Sensitive-looking path is present" in item["title"] for item in findings)
     assert all("is tracked" not in item["title"] for item in findings)
+
+
+def test_open_file_stat_matching_has_safe_windows_fallback() -> None:
+    expected = SimpleNamespace(
+        st_mode=stat.S_IFREG | 0o600,
+        st_dev=1,
+        st_ino=2,
+        st_size=4,
+        st_mtime_ns=10,
+        st_ctime_ns=20,
+    )
+    different_handle_identity = SimpleNamespace(
+        st_mode=stat.S_IFREG | 0o600,
+        st_dev=3,
+        st_ino=4,
+        st_size=4,
+        st_mtime_ns=10,
+        st_ctime_ns=20,
+    )
+    changed_metadata = SimpleNamespace(
+        st_mode=stat.S_IFREG | 0o600,
+        st_dev=3,
+        st_ino=4,
+        st_size=4,
+        st_mtime_ns=11,
+        st_ctime_ns=20,
+    )
+
+    assert not brain_inventory._stat_matches_open_file(
+        expected, different_handle_identity, require_identity=True
+    )
+    assert brain_inventory._stat_matches_open_file(
+        expected, different_handle_identity, require_identity=False
+    )
+    assert not brain_inventory._stat_matches_open_file(
+        expected, changed_metadata, require_identity=False
+    )
 
 
 def test_git_project_subdirectory_can_be_scanned(
