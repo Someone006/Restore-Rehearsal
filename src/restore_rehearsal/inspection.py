@@ -266,7 +266,7 @@ def write_inspection_json(path: Path, payload: dict[str, Any]) -> None:
     )
     temporary = Path(temporary_name)
     try:
-        os.fchmod(descriptor, 0o600)
+        temporary.chmod(0o600)
         with os.fdopen(descriptor, "wb") as stream:
             stream.write(encoded)
             stream.flush()
