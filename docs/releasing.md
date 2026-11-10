@@ -32,8 +32,9 @@ short-lived repository token and is disabled unless the repository variable is s
 6. Verify the published tag, source archive, checksums, attestation, installation command, and the
    release page from a clean environment.
 
-Manual dispatch verifies and packages an existing version tag but does not publish a GitHub release,
-PyPI package, or container. It is useful for rehearsing the pipeline.
+Manual dispatch verifies and packages an existing version tag without publishing by default. An
+operator may explicitly select `publish_github` to create or repair only the GitHub prerelease after
+the build and attestation jobs pass. Manual dispatch never publishes a PyPI package or container.
 
 ## Local rehearsal
 

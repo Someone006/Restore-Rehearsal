@@ -8,6 +8,7 @@ package; recipe and report schemas are versioned independently while alpha.
 ### Fixed
 
 - Gave the checkout-free GitHub release publication job explicit repository context.
+- Added an explicit, default-off manual recovery path for GitHub prerelease publication.
 
 ## [0.3.0] - 2026-11-10
 
