@@ -162,6 +162,7 @@ def test_workflow_actions_are_pinned_and_container_is_non_root() -> None:
     assert "python -m scripts.generate_homebrew_formula" in release_workflow
     assert "working-directory: release" in release_workflow
     assert "sha256sum --check SHA256SUMS" in release_workflow
+    assert "GH_REPO: ${{ github.repository }}" in release_workflow
     dockerfile = (_root() / "Dockerfile").read_text(encoding="utf-8")
     assert re.search(r"^FROM [^\n]+@sha256:[0-9a-f]{64}$", dockerfile, re.MULTILINE)
     assert "USER 65532:65532" in dockerfile

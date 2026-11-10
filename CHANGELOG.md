@@ -5,7 +5,9 @@ package; recipe and report schemas are versioned independently while alpha.
 
 ## [Unreleased]
 
-No changes yet.
+### Fixed
+
+- Gave the checkout-free GitHub release publication job explicit repository context.
 
 ## [0.3.0] - 2026-11-10
 

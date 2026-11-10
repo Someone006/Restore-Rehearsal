@@ -140,6 +140,7 @@ jobs:
       - name: Create or update the prerelease
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.build.outputs.tag }}
         shell: bash
         run: |
