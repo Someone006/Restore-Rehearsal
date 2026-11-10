@@ -44,7 +44,7 @@ Source = "https://github.com/Someone006/Restore-Rehearsal"
 [project.optional-dependencies]
 dev = [
   "build>=1.2.2,<2",
-  "pytest>=8.3,<9",
+  "pytest>=8.3,<10",
   "pytest-cov>=6,<7",
   "ruff>=0.9,<1",
 ]
