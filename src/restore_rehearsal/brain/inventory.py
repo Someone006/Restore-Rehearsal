@@ -614,17 +614,20 @@ def _may_parse_text(value: str) -> bool:
 def _stat_matches_open_file(
     expected: os.stat_result,
     actual: os.stat_result,
-    *,
-    require_identity: bool,
 ) -> bool:
-    if not stat.S_ISREG(actual.st_mode) or actual.st_size != expected.st_size:
-        return False
-    if require_identity:
-        return actual.st_dev == expected.st_dev and actual.st_ino == expected.st_ino
-    # Windows does not guarantee comparable identity or timestamp fields between path stat and
-    # open-handle fstat calls. The caller rechecks canonical containment, symlinks, type, and size
-    # after reading; POSIX keeps the stronger device/inode identity check above.
-    return True
+    return (
+        stat.S_ISREG(actual.st_mode)
+        and actual.st_dev == expected.st_dev
+        and actual.st_ino == expected.st_ino
+        and actual.st_size == expected.st_size
+    )
+
+
+def _read_only_flags() -> int:
+    flags = os.O_RDONLY
+    for name in ("O_CLOEXEC", "O_NOFOLLOW", "O_BINARY"):
+        flags |= int(getattr(os, name, 0))
+    return flags
 
 
 def _safe_read(root: Path, path: Path, expected: os.stat_result) -> bytes:
@@ -642,19 +645,14 @@ def _safe_read(root: Path, path: Path, expected: os.stat_result) -> bytes:
                 raise SafetyError("brain scanner refuses files below a symlinked directory")
         except OSError as exc:
             raise SafetyError("project path changed during brain inventory") from exc
-    flags = os.O_RDONLY
-    if hasattr(os, "O_CLOEXEC"):
-        flags |= os.O_CLOEXEC
-    if hasattr(os, "O_NOFOLLOW"):
-        flags |= os.O_NOFOLLOW
+    flags = _read_only_flags()
     try:
         descriptor = os.open(path, flags)
     except OSError as exc:
         raise SafetyError("project file changed during brain inventory") from exc
     try:
         actual = os.fstat(descriptor)
-        require_identity = os.name != "nt"
-        if not _stat_matches_open_file(expected, actual, require_identity=require_identity):
+        if not _stat_matches_open_file(expected, actual):
             raise SafetyError("project file changed during brain inventory")
         chunks: list[bytes] = []
         remaining = actual.st_size
@@ -672,7 +670,7 @@ def _safe_read(root: Path, path: Path, expected: os.stat_result) -> bytes:
         if (
             not resolved_after.is_relative_to(root)
             or stat.S_ISLNK(current.st_mode)
-            or not _stat_matches_open_file(current, actual, require_identity=require_identity)
+            or not _stat_matches_open_file(current, actual)
         ):
             raise SafetyError("project file changed during brain inventory")
         return b"".join(chunks)
