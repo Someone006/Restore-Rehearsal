@@ -126,10 +126,7 @@ def test_pages_have_unique_search_and_social_metadata_without_remote_runtime_ass
         assert len(structured_data) == 1
         assert all(data["@context"] == "https://schema.org" for data in structured_data)
         if relative != "index.html":
-            entity_types = {
-                entity["@type"]
-                for entity in structured_data[0]["@graph"]
-            }
+            entity_types = {entity["@type"] for entity in structured_data[0]["@graph"]}
             assert {"WebPage", "SoftwareApplication", "BreadcrumbList"} <= entity_types
 
     assert len(titles) == len(PAGES)
