@@ -1,0 +1,3 @@
+Backups are promises. Restores are proof. Restore Rehearsal is an open-source, local-first Project Brain and backup restore tester for people and AI agents: https://someone006.github.io/Restore-Rehearsal/
+
+Music: Sascha Ende, ende.app (CC BY 4.0).

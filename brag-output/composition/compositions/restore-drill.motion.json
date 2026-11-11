@@ -1,0 +1,10 @@
+{
+  "duration": 4.37,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#s3-backup .card", "bySec": 0.5 },
+    { "kind": "before", "a": "#s3-restore", "b": "#s3-verify" },
+    { "kind": "before", "a": "#s3-verify", "b": "#s3-upgrade" },
+    { "kind": "staysInFrame", "selector": ".s3-check" },
+    { "kind": "keepsMoving", "withinSelector": "#root", "maxStaticSec": 2.0 }
+  ]
+}

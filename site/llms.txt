@@ -1,0 +1,33 @@
+# Restore Rehearsal
+
+> Restore Rehearsal is an Apache-2.0, local-first command-line application for backup restore testing and private project evidence. It serves people and AI agents without uploading project data or collecting telemetry.
+
+Current documented release: v0.3.0 (alpha).
+
+Restore Rehearsal has two distinct parts:
+
+- Project Brain statically scans a Git or ordinary local folder without executing project code. It stores architecture, dependencies, tests, deployment and recovery evidence, decisions, failed attempts, findings, and structural history in one private `.rrbrain` SQLite file.
+- Restore Rehearsal runs a reviewed backup restore and candidate upgrade inside a disposable Docker Compose environment, records share-safe evidence, and cleans up the stack.
+
+## Important limitations
+
+- The alpha may be used commercially under Apache-2.0, but it must not be the sole production release gate, disaster-recovery control, accessibility certification, security assessment, or legal/compliance decision.
+- Project Brain, inspection plans, importers, skills, adapters, and MCP require Python 3.11 or newer. Git is optional.
+- Executing restore drills additionally requires Linux, Docker Engine, and Docker Compose v2.
+- API keys, credentials, tokens, private keys, and backup contents must never be uploaded. Other outbound project information requires the user's explicit destination and scope consent.
+
+## Primary pages
+
+- Home: https://someone006.github.io/Restore-Rehearsal/
+- Backup restore testing: https://someone006.github.io/Restore-Rehearsal/restore-testing/
+- Private Project Brain: https://someone006.github.io/Restore-Rehearsal/project-brain/
+- AI Agent Skills: https://someone006.github.io/Restore-Rehearsal/agent-skills/
+
+## Source and documentation
+
+- Source: https://github.com/Someone006/Restore-Rehearsal
+- Release: https://github.com/Someone006/Restore-Rehearsal/releases/tag/v0.3.0
+- README: https://github.com/Someone006/Restore-Rehearsal#readme
+- Commercial readiness: https://github.com/Someone006/Restore-Rehearsal/blob/main/docs/commercial-readiness.md
+- Safety model: https://github.com/Someone006/Restore-Rehearsal/blob/main/docs/safety.md
+- License: https://github.com/Someone006/Restore-Rehearsal/blob/main/LICENSE

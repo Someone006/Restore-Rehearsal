@@ -1,0 +1,15 @@
+{
+  "duration": 22.93,
+  "assertions": [
+    { "kind": "before", "a": "#promise-proof", "b": "#project-brain" },
+    { "kind": "before", "a": "#project-brain", "b": "#restore-drill" },
+    { "kind": "before", "a": "#restore-drill", "b": "#one-file" },
+    { "kind": "before", "a": "#one-file", "b": "#product-lockup" },
+    { "kind": "staysInFrame", "selector": "#promise-proof" },
+    { "kind": "staysInFrame", "selector": "#project-brain" },
+    { "kind": "staysInFrame", "selector": "#restore-drill" },
+    { "kind": "staysInFrame", "selector": "#one-file" },
+    { "kind": "staysInFrame", "selector": "#product-lockup" },
+    { "kind": "keepsMoving", "withinSelector": "#root", "maxStaticSec": 2.8 }
+  ]
+}

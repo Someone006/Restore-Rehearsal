@@ -1,0 +1,127 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 73% 38%, rgba(115, 230, 181, 0.16), transparent 31%),
+        #07110f;
+      color: #f3f8f6;
+      font-family: Inter, sans-serif;
+    }
+
+    #s1-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(115, 230, 181, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(115, 230, 181, 0.045) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: linear-gradient(to bottom, transparent, #000 26%, #000 74%, transparent);
+    }
+
+    #s1-kicker {
+      position: absolute;
+      top: 110px;
+      left: 130px;
+      color: #73e6b5;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    #s1-line1,
+    #s1-line2 {
+      position: absolute;
+      left: 130px;
+      right: 130px;
+      height: 190px;
+    }
+
+    #s1-line1 {
+      top: 310px;
+    }
+
+    #s1-line2 {
+      top: 500px;
+    }
+
+    #s1-line1 .anim,
+    #s1-line2 .anim {
+      font-size: 126px;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    #s1-line2 .anim {
+      color: #73e6b5;
+    }
+
+    #s1-rule {
+      position: absolute;
+      left: 130px;
+      top: 745px;
+      width: 1660px;
+      height: 3px;
+    }
+
+    #s1-rule .anim {
+      width: 100%;
+      height: 100%;
+      transform-origin: left center;
+      background: #73e6b5;
+      box-shadow: 0 0 32px rgba(115, 230, 181, 0.32);
+    }
+
+    #s1-foot {
+      position: absolute;
+      left: 130px;
+      top: 806px;
+      color: #b8cbc5;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 0.04em;
+    }
+  </style>
+  <div id="root" data-composition-id="promise-proof" data-width="1920" data-height="1080">
+    <div id="s1-grid" data-layout-ignore></div>
+    <div id="s1-kicker">Restore Rehearsal</div>
+    <div id="s1-line1" class="clip" data-start="0" data-duration="3.27" data-track-index="1">
+      <div class="anim">Backups are promises.</div>
+    </div>
+    <div id="s1-line2" class="clip" data-start="0.78" data-duration="2.49" data-track-index="2">
+      <div class="anim">Restores are proof.</div>
+    </div>
+    <div id="s1-rule" class="clip" data-start="1.78" data-duration="1.49" data-track-index="3" data-layout-ignore>
+      <div class="anim"></div>
+    </div>
+    <div id="s1-foot">OPEN SOURCE · LOCAL FIRST · APACHE-2.0</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      "#s1-line1 .anim",
+      { opacity: 0.15, filter: "blur(12px)", y: 24 },
+      { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.62, ease: "power4.out" },
+      0,
+    );
+    tl.fromTo(
+      "#s1-line2 .anim",
+      { opacity: 0, filter: "blur(14px)", y: 30 },
+      { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.58, ease: "power4.out" },
+      0.78,
+    );
+    tl.fromTo(
+      "#s1-rule .anim",
+      { scaleX: 0, opacity: 0.4 },
+      { scaleX: 1, opacity: 1, duration: 0.72, ease: "power3.out" },
+      1.78,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["promise-proof"] = tl;
+  </script>
+</template>

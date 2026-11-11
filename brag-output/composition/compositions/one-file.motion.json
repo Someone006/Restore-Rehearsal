@@ -1,0 +1,10 @@
+{
+  "duration": 4.36,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#s4-file .file-card", "bySec": 0.55 },
+    { "kind": "before", "a": "#s4-architecture", "b": "#s4-impact" },
+    { "kind": "before", "a": "#s4-impact", "b": "#s4-recovery" },
+    { "kind": "staysInFrame", "selector": ".s4-label" },
+    { "kind": "keepsMoving", "withinSelector": "#root", "maxStaticSec": 2.0 }
+  ]
+}

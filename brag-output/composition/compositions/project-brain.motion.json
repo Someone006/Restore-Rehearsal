@@ -1,0 +1,10 @@
+{
+  "duration": 5.47,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#s2-terminal .command", "bySec": 0.8 },
+    { "kind": "before", "a": "#s2-project", "b": "#s2-source" },
+    { "kind": "before", "a": "#s2-source", "b": "#s2-tests" },
+    { "kind": "staysInFrame", "selector": ".s2-node" },
+    { "kind": "keepsMoving", "withinSelector": "#root", "maxStaticSec": 2.1 }
+  ]
+}

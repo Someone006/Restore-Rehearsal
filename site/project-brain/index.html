@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#07110f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <title>Private Local Project Brain for AI Agents — Rehearse</title>
+    <meta name="description" content="Scan any local project into one private SQLite evidence graph for architecture, dependencies, tests, decisions, findings, history, and change impact.">
+    <link rel="canonical" href="https://someone006.github.io/Restore-Rehearsal/project-brain/">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../assets/site.css">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Restore Rehearsal">
+    <meta property="og:title" content="A Private Local Project Brain for People and AI Agents">
+    <meta property="og:description" content="Architecture, dependencies, tests, recovery evidence, decisions, failures, findings, and structural history in one local file.">
+    <meta property="og:url" content="https://someone006.github.io/Restore-Rehearsal/project-brain/">
+    <meta property="og:image" content="https://someone006.github.io/Restore-Rehearsal/assets/social-card.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Restore Rehearsal includes one private local project brain for people and AI agents.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="A Private Local Project Brain for People and AI Agents">
+    <meta name="twitter:description" content="One local evidence graph for architecture, change impact, recovery, findings, and decisions.">
+    <meta name="twitter:image" content="https://someone006.github.io/Restore-Rehearsal/assets/social-card.png">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="../"><span class="brand-mark">↻</span> Restore Rehearsal</a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <ul>
+            <li><a href="../restore-testing/">Restore testing</a></li>
+            <li><a href="./" aria-current="page">Project Brain</a></li>
+            <li><a href="../agent-skills/">Agent Skills</a></li>
+            <li><a href="https://github.com/Someone006/Restore-Rehearsal">GitHub</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="subpage">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Project Brain</p>
+            <h1>One private evidence graph for the whole project.</h1>
+            <p class="lead">Statically scan a Git repository or any ordinary local project folder into one focused <code>.rrbrain</code> SQLite file—without executing the project’s code.</p>
+            <div class="actions">
+              <a class="button primary" href="#build">Build a local brain</a>
+              <a class="button" href="https://github.com/Someone006/Restore-Rehearsal/blob/main/docs/brain.md">Read the technical guide</a>
+            </div>
+          </div>
+          <aside class="hero-panel" aria-label="Project Brain facts">
+            <div class="status">Local and inspectable</div>
+            <ul class="fact-list">
+              <li><strong>Git:</strong> optional</li>
+              <li><strong>Storage:</strong> one private SQLite file</li>
+              <li><strong>History:</strong> up to 20 structural snapshots</li>
+              <li><strong>Visual:</strong> self-contained offline HTML</li>
+              <li><strong>Execution:</strong> bounded static scan only</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="contents-heading">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Connected evidence</p>
+            <h2 id="contents-heading">More than a pile of notes.</h2>
+            <p>Project Brain records where evidence came from and how project elements connect, so a person or agent can ask a focused question instead of ingesting the entire tree.</p>
+          </div>
+          <div class="cards three">
+            <article class="card">
+              <h3>Architecture and dependencies</h3>
+              <p>Source areas, manifests, configuration, APIs, infrastructure, deployment files, dependency edges, and recovery signals.</p>
+            </article>
+            <article class="card">
+              <h3>Tests and review findings</h3>
+              <p>Local test evidence plus bounded imports such as SARIF, JUnit, coverage, OpenAPI, SBOM, Terraform, and Compose fragments.</p>
+            </article>
+            <article class="card">
+              <h3>Memory with provenance</h3>
+              <p>Decisions, failed attempts, active findings, recovery knowledge, snapshots, diffs, and change-impact traversal.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="build" aria-labelledby="build-heading">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">First local snapshot</p>
+            <h2 id="build-heading">Build, query, and visualize.</h2>
+            <p>The scan is bounded and static. The generated visualization is a self-contained local HTML file with no remote scripts, fonts, analytics, or requests.</p>
+          </div>
+          <pre class="terminal"><code>rehearse brain build . --output project.rrbrain --label initial
+rehearse brain summary project.rrbrain --json
+rehearse brain query project.rrbrain "database recovery" --json
+rehearse brain visualize project.rrbrain --output project-brain.html</code></pre>
+          <div class="flow" aria-label="Project Brain workflow">
+            <div><strong>Static scan</strong><span>Read bounded local structure</span></div>
+            <div><strong>Evidence graph</strong><span>Connect sources and findings</span></div>
+            <div><strong>Focused context</strong><span>Query only what the task needs</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="views-heading">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Offline visual</p>
+            <h2 id="views-heading">Six views, one file.</h2>
+          </div>
+          <div class="cards three">
+            <article class="card"><h3>Graph</h3><p>Explore nodes and evidence connections without a hosted graph service.</p></article>
+            <article class="card"><h3>Changes</h3><p>Compare structural snapshots and inspect added, changed, or removed evidence.</p></article>
+            <article class="card"><h3>Findings</h3><p>Review detected gaps with confidence and a route to verify each one.</p></article>
+            <article class="card"><h3>Recovery</h3><p>Bring recovery-related artifacts and missing evidence into one view.</p></article>
+            <article class="card"><h3>Evidence</h3><p>Keep imported and scanner-derived evidence distinguishable by provenance.</p></article>
+            <article class="card"><h3>Timeline</h3><p>Follow snapshots, decisions, failures, and project memories over time.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="privacy-heading">
+        <div class="container">
+          <div class="cards">
+            <article class="card">
+              <p class="eyebrow">Privacy boundary</p>
+              <h2 id="privacy-heading">Local does not mean automatically share-safe.</h2>
+              <p>A brain can contain sensitive project metadata. Keep <code>*.rrbrain</code> out of version control and review ignore rules before scanning. <code>.rehearseignore</code> controls what the scanner reads; it is not a Git privacy boundary.</p>
+            </article>
+            <article class="card">
+              <p class="eyebrow">Evidence, not authority</p>
+              <h2>Focused context with human review.</h2>
+              <p>Findings point to missing or conflicting evidence and provide a verification route. They are not automatic legal, privacy, accessibility, security, or architecture conclusions.</p>
+              <p><a href="https://github.com/Someone006/Restore-Rehearsal/blob/main/docs/brain.md">Review the storage and privacy details →</a></p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>Project Brain stays local · Git optional · No telemetry</div>
+        <div class="footer-links">
+          <a href="../">Home</a>
+          <a href="https://github.com/Someone006/Restore-Rehearsal/blob/main/docs/brain.md">Documentation</a>
+          <a href="https://github.com/Someone006/Restore-Rehearsal/releases/tag/v0.3.0">Release</a>
+          <a href="https://github.com/Someone006/Restore-Rehearsal/blob/main/LICENSE">License</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

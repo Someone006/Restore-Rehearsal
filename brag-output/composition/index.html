@@ -1,0 +1,151 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+    {"id":"color-ground","type":"color","label":"Background","default":"#07110f"},
+    {"id":"color-ink","type":"color","label":"Text","default":"#f3f8f6"},
+    {"id":"color-accent","type":"color","label":"Accent","default":"#73e6b5"},
+    {"id":"color-panel","type":"color","label":"Panel","default":"#122521"},
+    {"id":"font-display","type":"string","label":"Display font","default":"Inter"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      :root {
+        --color-ground: #07110f;
+        --color-ink: #f3f8f6;
+        --color-accent: #73e6b5;
+        --color-panel: #122521;
+        --font-display: Inter;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--color-ground);
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--color-ground);
+        color: var(--color-ink);
+        font-family: var(--font-display), sans-serif;
+      }
+
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="22.93"
+      data-width="1920"
+      data-height="1080"
+      data-fps="30"
+    >
+      <div
+        id="promise-proof"
+        class="clip"
+        data-composition-id="promise-proof"
+        data-composition-src="compositions/promise-proof.html"
+        data-start="0"
+        data-duration="3.27"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="project-brain"
+        class="clip"
+        data-composition-id="project-brain"
+        data-composition-src="compositions/project-brain.html"
+        data-start="3.27"
+        data-duration="5.47"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="restore-drill"
+        class="clip"
+        data-composition-id="restore-drill"
+        data-composition-src="compositions/restore-drill.html"
+        data-start="8.74"
+        data-duration="4.37"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="one-file"
+        class="clip"
+        data-composition-id="one-file"
+        data-composition-src="compositions/one-file.html"
+        data-start="13.11"
+        data-duration="4.36"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="product-lockup"
+        class="clip"
+        data-composition-id="product-lockup"
+        data-composition-src="compositions/product-lockup.html"
+        data-start="17.47"
+        data-duration="5.46"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <audio
+        id="bg-music"
+        class="clip"
+        data-timeline-role="music"
+        data-start="0"
+        data-duration="22.93"
+        data-track-index="10"
+        data-volume="0.24"
+        data-fade-in="0.25"
+        data-fade-out="0.9"
+        src="assets/music/happy-beats-business-moves-vol-12-by-ende-dot-app.mp3"
+      ></audio>
+      <audio id="sfx-proof" class="clip" data-start="2.19" data-duration="0.18" data-track-index="12" data-volume="0.42" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+      <audio id="sfx-command" class="clip" data-start="4.39" data-duration="0.01" data-track-index="11" data-volume="0.52" src="assets/sfx/interface/click_003.ogg"></audio>
+      <audio id="sfx-restore" class="clip" data-start="9.29" data-duration="0.01" data-track-index="11" data-volume="0.48" src="assets/sfx/interface/click_003.ogg"></audio>
+      <audio id="sfx-verify" class="clip" data-start="10.37" data-duration="0.01" data-track-index="11" data-volume="0.48" src="assets/sfx/interface/click_003.ogg"></audio>
+      <audio id="sfx-upgrade" class="clip" data-start="11.46" data-duration="0.01" data-track-index="11" data-volume="0.48" src="assets/sfx/interface/click_003.ogg"></audio>
+      <audio id="sfx-file" class="clip" data-start="13.11" data-duration="0.18" data-track-index="12" data-volume="0.46" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio>
+      <audio id="sfx-lockup" class="clip" data-start="17.47" data-duration="1.48" data-track-index="13" data-volume="0.34" src="assets/sfx/impact/impactBell_heavy_000.ogg"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines.main = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

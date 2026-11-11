@@ -17,3 +17,10 @@ rehearse-report*.json
 rehearse-workspace-*/
 *.rrbrain
 project-brain*.html
+!brag-output/composition/compositions/project-brain.html
+
+# Local composition QA artifacts and renderer caches are reproducible and remain untracked.
+brag-output/composition/.hyperframes/
+brag-output/composition/.transcode-cache/
+brag-output/composition/.waveform-cache/
+brag-output/composition/node_modules/

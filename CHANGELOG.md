@@ -5,6 +5,19 @@ package; recipe and report schemas are versioned independently while alpha.
 
 ## [Unreleased]
 
+### Added
+
+- Added a crawlable, tracker-free GitHub Pages site with focused guides for backup restore testing,
+  the private Project Brain, and local AI Agent Skills, plus canonical metadata, structured data,
+  a sitemap, and a robots policy.
+- Added a locally rendered launch video, poster, reusable composition source, and share copy with
+  complete third-party attribution.
+
+### Changed
+
+- Added search-focused repository metadata and clearer product naming without changing the alpha
+  safety, privacy, or commercial-use boundaries.
+
 ### Fixed
 
 - Gave the checkout-free GitHub release publication job explicit repository context.

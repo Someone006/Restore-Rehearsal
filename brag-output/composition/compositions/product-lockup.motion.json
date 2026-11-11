@@ -1,0 +1,9 @@
+{
+  "duration": 5.46,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#s5-line1 .anim", "bySec": 0.55 },
+    { "kind": "before", "a": "#s5-line1 .anim", "b": "#s5-line2 .anim" },
+    { "kind": "before", "a": "#s5-line2 .anim", "b": "#s5-product .lockup" },
+    { "kind": "staysInFrame", "selector": "#s5-product .lockup" }
+  ]
+}

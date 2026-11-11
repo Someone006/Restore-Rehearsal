@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#07110f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <title>Open-Source Backup Restore Testing — Restore Rehearsal</title>
+    <meta name="description" content="Test backups and candidate upgrades in a disposable Docker Compose stack, record share-safe recovery evidence, and clean up automatically.">
+    <link rel="canonical" href="https://someone006.github.io/Restore-Rehearsal/restore-testing/">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../assets/site.css">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Restore Rehearsal">
+    <meta property="og:title" content="Open-Source Backup Restore Testing">
+    <meta property="og:description" content="Rehearse a real restore and candidate upgrade before production using a disposable Docker Compose environment.">
+    <meta property="og:url" content="https://someone006.github.io/Restore-Rehearsal/restore-testing/">
+    <meta property="og:image" content="https://someone006.github.io/Restore-Rehearsal/assets/social-card.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Restore Rehearsal: test backups before production.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Open-Source Backup Restore Testing">
+    <meta name="twitter:description" content="Restore, check, upgrade, check again, retain evidence, and remove the disposable stack.">
+    <meta name="twitter:image" content="https://someone006.github.io/Restore-Rehearsal/assets/social-card.png">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="../"><span class="brand-mark">↻</span> Restore Rehearsal</a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <ul>
+            <li><a href="./" aria-current="page">Restore testing</a></li>
+            <li><a href="../project-brain/">Project Brain</a></li>
+            <li><a href="../agent-skills/">Agent Skills</a></li>
+            <li><a href="https://github.com/Someone006/Restore-Rehearsal">GitHub</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="subpage">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Backup restore testing</p>
+            <h1>Prove the recovery path before production.</h1>
+            <p class="lead">A backup file proves that something was written. Restore Rehearsal tests whether a reviewed backup can restore a disposable application, survive a candidate upgrade, and produce useful evidence.</p>
+            <div class="actions">
+              <a class="button primary" href="#workflow">See the workflow</a>
+              <a class="button" href="https://github.com/Someone006/Restore-Rehearsal/tree/main/examples/minimal">View the synthetic example</a>
+            </div>
+          </div>
+          <aside class="hero-panel" aria-label="Restore drill requirements">
+            <div class="status">Specialized capability</div>
+            <ul class="fact-list">
+              <li><strong>Runtime:</strong> Linux</li>
+              <li><strong>Isolation:</strong> Docker Engine and Compose v2</li>
+              <li><strong>Input:</strong> reviewed versioned recipe</li>
+              <li><strong>Output:</strong> allowlisted share-safe JSON report</li>
+              <li><strong>Cleanup:</strong> disposable stack removal</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="workflow" aria-labelledby="workflow-heading">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">The rehearsal</p>
+            <h2 id="workflow-heading">Restore, check, upgrade, check again.</h2>
+            <p>The recipe is data, not an inferred promise. Rehearse validates it before the drill and keeps the execution inside a project-scoped disposable Compose environment.</p>
+          </div>
+          <ol class="steps">
+            <li><strong>Validate the declared recipe.</strong><span>Reject unsupported or unsafe configuration before starting the stack.</span></li>
+            <li><strong>Create an isolated Compose project.</strong><span>Use a unique project name and dedicated temporary workspace.</span></li>
+            <li><strong>Restore the declared backup.</strong><span>Exercise the project’s reviewed recovery command rather than assuming the backup is usable.</span></li>
+            <li><strong>Run the pre-upgrade checks.</strong><span>Confirm the restored baseline is healthy enough to continue.</span></li>
+            <li><strong>Apply the candidate upgrade.</strong><span>Test the declared target and any required intermediate versions.</span></li>
+            <li><strong>Run post-upgrade checks and retain evidence.</strong><span>Write an allowlisted report, then remove the disposable environment.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="start-heading">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Synthetic first run</p>
+            <h2 id="start-heading">Validate before executing.</h2>
+            <p>The repository includes a synthetic example without real credentials or private backup data.</p>
+          </div>
+          <pre class="terminal"><code>rehearse validate examples/minimal/rehearse.yaml
+rehearse run examples/minimal/rehearse.yaml --report rehearsal-report.json</code></pre>
+          <div class="callout"><strong>Review required:</strong> never point a first run at production data. Inspect the recipe, images, commands, backup source, checks, pull policy, and cleanup behavior before execution.</div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="scope-heading">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Where it helps</p>
+            <h2 id="scope-heading">Built for stateful self-hosted and Compose projects.</h2>
+          </div>
+          <div class="cards">
+            <article class="card">
+              <h3>Good fit</h3>
+              <ul>
+                <li>A stateful application already has a Docker Compose deployment.</li>
+                <li>Backups exist, but realistic restore checks are manual or missing.</li>
+                <li>Database migrations or skipped releases create upgrade uncertainty.</li>
+                <li>A team wants repeatable evidence before a human release decision.</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Not a replacement</h3>
+              <ul>
+                <li>It does not create backups or choose a retention policy.</li>
+                <li>It is not a production orchestrator or deployment platform.</li>
+                <li>It is not a complete disaster-recovery program.</li>
+                <li>It cannot certify compliance, security, or business continuity.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="evidence-heading">
+        <div class="container">
+          <div class="cards">
+            <article class="card">
+              <p class="eyebrow">Share-safe evidence</p>
+              <h2 id="evidence-heading">Report status, not secrets.</h2>
+              <p>The versioned JSON report schema contains allowlisted status and timing evidence rather than backup contents or arbitrary command output. Review every artifact before sharing it outside its original destination and scope.</p>
+            </article>
+            <article class="card">
+              <p class="eyebrow">Honest boundary</p>
+              <h2>One control among many.</h2>
+              <p>A successful drill increases confidence in the tested path at that time. It does not guarantee every failure mode, production dataset, infrastructure dependency, recovery objective, or future version.</p>
+              <p><a href="https://github.com/Someone006/Restore-Rehearsal/blob/main/docs/safety.md">Read the complete safety model →</a></p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>Restore Rehearsal v0.3.0 alpha · Apache-2.0</div>
+        <div class="footer-links">
+          <a href="../">Home</a>
+          <a href="https://github.com/Someone006/Restore-Rehearsal#readme">Documentation</a>
+          <a href="https://github.com/Someone006/Restore-Rehearsal/releases/tag/v0.3.0">Release</a>
+          <a href="https://github.com/Someone006/Restore-Rehearsal/blob/main/LICENSE">License</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

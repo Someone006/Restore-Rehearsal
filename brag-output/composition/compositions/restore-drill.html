@@ -1,0 +1,285 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 52%, rgba(115, 230, 181, 0.13), transparent 35%),
+        #07110f;
+      color: #f3f8f6;
+      font-family: Inter, sans-serif;
+    }
+
+    #s3-kicker {
+      position: absolute;
+      top: 82px;
+      left: 118px;
+      color: #73e6b5;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    #s3-headline {
+      position: absolute;
+      top: 132px;
+      left: 118px;
+      width: 1500px;
+      font-size: 78px;
+      font-weight: 900;
+      letter-spacing: -0.045em;
+      line-height: 1.08;
+    }
+
+    #s3-backup {
+      position: absolute;
+      top: 430px;
+      left: 150px;
+      width: 380px;
+      height: 240px;
+    }
+
+    #s3-backup .card {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #528c7d;
+      border-radius: 28px;
+      background: #0d1b18;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+    }
+
+    #s3-backup .icon {
+      display: grid;
+      width: 92px;
+      height: 92px;
+      place-items: center;
+      margin-bottom: 22px;
+      border: 2px solid #73e6b5;
+      border-radius: 22px;
+      color: #73e6b5;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    #s3-backup strong {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 31px;
+      letter-spacing: 0.08em;
+    }
+
+    #s3-arrow {
+      position: absolute;
+      top: 524px;
+      left: 545px;
+      width: 240px;
+      height: 54px;
+    }
+
+    #s3-arrow .line {
+      position: absolute;
+      top: 25px;
+      left: 0;
+      width: 220px;
+      height: 3px;
+      transform-origin: left center;
+      background: #73e6b5;
+      box-shadow: 0 0 22px rgba(115, 230, 181, 0.35);
+    }
+
+    #s3-arrow .tip {
+      position: absolute;
+      top: 14px;
+      right: 5px;
+      width: 24px;
+      height: 24px;
+      border-top: 3px solid #73e6b5;
+      border-right: 3px solid #73e6b5;
+      transform: rotate(45deg);
+    }
+
+    #s3-stack {
+      position: absolute;
+      top: 330px;
+      left: 800px;
+      width: 970px;
+      height: 560px;
+    }
+
+    #s3-stack .panel {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border: 2px solid #29453f;
+      border-radius: 30px;
+      background: #122521;
+      box-shadow: 0 28px 75px rgba(0, 0, 0, 0.35);
+    }
+
+    #s3-stack .panel-head {
+      display: flex;
+      height: 104px;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: 42px;
+      border-bottom: 2px solid #29453f;
+    }
+
+    #s3-stack .panel-head strong {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 0.09em;
+    }
+
+    #s3-stack .isolated {
+      padding: 10px 17px;
+      border: 1px solid #528c7d;
+      border-radius: 999px;
+      color: #a1f2cf;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #s3-stack .checks {
+      display: grid;
+      gap: 16px;
+      padding: 34px 42px 20px;
+    }
+
+    .s3-check {
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      min-height: 86px;
+      align-items: center;
+      gap: 20px;
+      padding-inline: 24px;
+      border: 1px solid #29453f;
+      border-radius: 18px;
+      background: #0d1b18;
+    }
+
+    .s3-check .mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 50%;
+      background: #73e6b5;
+      color: #07110f;
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .s3-check .name {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .s3-check .detail {
+      color: #b8cbc5;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 28px;
+    }
+
+    #s3-result {
+      position: absolute;
+      right: 42px;
+      bottom: 26px;
+      color: #a1f2cf;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 28px;
+      letter-spacing: 0.04em;
+    }
+  </style>
+  <div id="root" data-composition-id="restore-drill" data-width="1920" data-height="1080">
+    <div id="s3-kicker">02 · Rehearse recovery</div>
+    <div id="s3-headline">Restore. Verify. Upgrade.<br />Before production.</div>
+    <div id="s3-backup" class="clip" data-start="0" data-duration="4.37" data-track-index="1">
+      <div class="card"><span class="icon">.bak</span><strong>BACKUP</strong></div>
+    </div>
+    <div id="s3-arrow" class="clip" data-start="0.28" data-duration="4.09" data-track-index="2" data-layout-ignore>
+      <span class="line"></span><span class="tip"></span>
+    </div>
+    <div id="s3-stack" class="clip" data-start="0" data-duration="4.37" data-track-index="3">
+      <div class="panel">
+        <div class="panel-head"><strong>DISPOSABLE STACK</strong><span class="isolated">isolated</span></div>
+        <div class="checks">
+          <div id="s3-restore" class="s3-check"><span class="mark">✓</span><span class="name">RESTORE</span><span class="detail">backup loaded</span></div>
+          <div id="s3-verify" class="s3-check"><span class="mark">✓</span><span class="name">VERIFY</span><span class="detail">checks passed</span></div>
+          <div id="s3-upgrade" class="s3-check"><span class="mark">✓</span><span class="name">UPGRADE</span><span class="detail">candidate checked</span></div>
+        </div>
+        <div id="s3-result">evidence retained · stack removed</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // beat-locked: scene begins at global 8.74s.
+    tl.fromTo(
+      "#s3-headline",
+      { opacity: 0.18, filter: "blur(10px)", y: 20 },
+      { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.48, ease: "power4.out" },
+      0,
+    );
+    tl.fromTo(
+      "#s3-backup .card",
+      { opacity: 0, x: -34, filter: "blur(8px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.52, ease: "power4.out" },
+      0.08,
+    );
+    tl.fromTo(
+      "#s3-stack .panel",
+      { opacity: 0, x: 34, filter: "blur(8px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.56, ease: "power4.out" },
+      0.12,
+    );
+    tl.fromTo(
+      "#s3-arrow .line",
+      { scaleX: 0, opacity: 0.3 },
+      { scaleX: 1, opacity: 1, duration: 0.44, ease: "power3.out" },
+      0.28,
+    );
+    tl.fromTo(
+      "#s3-arrow .tip",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.18, ease: "power2.out" },
+      0.55,
+    );
+    // beat-grid: global 9.29s, 10.37s and 11.46s leave readable holds.
+    tl.fromTo(
+      "#s3-restore",
+      { opacity: 0, x: 20, filter: "blur(6px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.34, ease: "power4.out" },
+      0.55,
+    );
+    tl.fromTo(
+      "#s3-verify",
+      { opacity: 0, x: 20, filter: "blur(6px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.34, ease: "power4.out" },
+      1.63,
+    );
+    tl.fromTo(
+      "#s3-upgrade",
+      { opacity: 0, x: 20, filter: "blur(6px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.34, ease: "power4.out" },
+      2.72,
+    );
+    tl.fromTo(
+      "#s3-result",
+      { opacity: 0, y: 8 },
+      { opacity: 1, y: 0, duration: 0.28, ease: "power3.out" },
+      3.02,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["restore-drill"] = tl;
+  </script>
+</template>

@@ -12,14 +12,21 @@ license = "Apache-2.0"
 authors = [{ name = "Rehearse contributors" }]
 license-files = ["LICENSE"]
 keywords = [
+  "agent-skills",
   "ai-agents",
   "backup",
+  "backup-validation",
   "code-analysis",
   "dependency-graph",
   "disaster-recovery",
   "docker-compose",
+  "knowledge-graph",
+  "mcp-server",
+  "project-brain",
   "restore",
+  "restore-testing",
   "self-hosted",
+  "software-architecture",
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -36,8 +43,8 @@ classifiers = [
 dependencies = ["pathspec>=0.12,<1", "PyYAML>=6.0.2,<7"]
 
 [project.urls]
-Homepage = "https://github.com/Someone006/Restore-Rehearsal"
-Documentation = "https://github.com/Someone006/Restore-Rehearsal#readme"
+Homepage = "https://someone006.github.io/Restore-Rehearsal/"
+Documentation = "https://someone006.github.io/Restore-Rehearsal/project-brain/"
 Issues = "https://github.com/Someone006/Restore-Rehearsal/issues"
 Source = "https://github.com/Someone006/Restore-Rehearsal"
 

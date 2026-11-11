@@ -1,0 +1,9 @@
+{
+  "duration": 3.27,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#s1-line1 .anim", "bySec": 0.55 },
+    { "kind": "before", "a": "#s1-line1 .anim", "b": "#s1-line2 .anim" },
+    { "kind": "staysInFrame", "selector": "#s1-line1 .anim" },
+    { "kind": "staysInFrame", "selector": "#s1-line2 .anim" }
+  ]
+}

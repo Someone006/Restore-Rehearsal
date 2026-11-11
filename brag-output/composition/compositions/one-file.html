@@ -1,0 +1,226 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 52%, rgba(115, 230, 181, 0.18), transparent 32%),
+        #07110f;
+      color: #f3f8f6;
+      font-family: Inter, sans-serif;
+    }
+
+    #s4-kicker {
+      position: absolute;
+      top: 76px;
+      left: 116px;
+      color: #73e6b5;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    #s4-headline {
+      position: absolute;
+      top: 124px;
+      left: 116px;
+      width: 1600px;
+      font-size: 76px;
+      font-weight: 900;
+      letter-spacing: -0.045em;
+    }
+
+    #s4-links {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: visible;
+    }
+
+    #s4-links path {
+      fill: none;
+      stroke: #4f8477;
+      stroke-width: 3;
+      stroke-dasharray: 14 11;
+    }
+
+    #s4-file {
+      position: absolute;
+      top: 306px;
+      left: 695px;
+      width: 530px;
+      height: 430px;
+    }
+
+    #s4-file .file-card {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #73e6b5;
+      border-radius: 34px;
+      background: #122521;
+      box-shadow: 0 0 56px rgba(115, 230, 181, 0.18), 0 30px 80px rgba(0, 0, 0, 0.36);
+    }
+
+    #s4-file .fold {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 96px;
+      height: 96px;
+      border-bottom: 3px solid #73e6b5;
+      border-left: 3px solid #73e6b5;
+      border-radius: 0 31px 0 24px;
+      background: #1a4438;
+    }
+
+    #s4-file .lock {
+      display: grid;
+      width: 78px;
+      height: 78px;
+      place-items: center;
+      margin-bottom: 26px;
+      border: 2px solid #528c7d;
+      border-radius: 50%;
+      color: #a1f2cf;
+      font-size: 35px;
+      font-weight: 800;
+    }
+
+    #s4-file .filename {
+      color: #f3f8f6;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 58px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    #s4-file .meta {
+      margin-top: 22px;
+      color: #b8cbc5;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 29px;
+      letter-spacing: 0.04em;
+    }
+
+    .s4-label {
+      position: absolute;
+      display: flex;
+      width: 350px;
+      height: 104px;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #29453f;
+      border-radius: 20px;
+      background: #0d1b18;
+      color: #f3f8f6;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    #s4-architecture {
+      top: 440px;
+      left: 120px;
+    }
+
+    #s4-impact {
+      top: 440px;
+      right: 120px;
+    }
+
+    #s4-recovery {
+      top: 824px;
+      left: 785px;
+    }
+
+    #s4-private {
+      position: absolute;
+      left: 116px;
+      bottom: 65px;
+      color: #a1f2cf;
+      font-size: 29px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+  </style>
+  <div id="root" data-composition-id="one-file" data-width="1920" data-height="1080">
+    <div id="s4-kicker">03 · Keep evidence connected</div>
+    <div id="s4-headline">One file. Whole-project connections.</div>
+    <svg id="s4-links" viewBox="0 0 1920 1080" aria-hidden="true" data-layout-ignore>
+      <path id="s4-link-architecture" d="M695 520 C610 520 565 492 470 492"></path>
+      <path id="s4-link-impact" d="M1225 520 C1310 520 1355 492 1450 492"></path>
+      <path id="s4-link-recovery" d="M960 736 C960 775 960 790 960 824"></path>
+    </svg>
+    <div id="s4-file" class="clip" data-start="0" data-duration="4.36" data-track-index="1">
+      <div class="file-card">
+        <span class="fold" aria-hidden="true"></span>
+        <span class="lock" aria-hidden="true">⌁</span>
+        <strong class="filename">project.rrbrain</strong>
+        <span class="meta">SQLite · local · offline visual</span>
+      </div>
+    </div>
+    <div id="s4-architecture" class="s4-label">ARCHITECTURE</div>
+    <div id="s4-impact" class="s4-label">CHANGE IMPACT</div>
+    <div id="s4-recovery" class="s4-label">RECOVERY EVIDENCE</div>
+    <div id="s4-private">PRIVATE BY DEFAULT · NO TELEMETRY</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // beat-locked: file reveal begins at global 13.11s.
+    tl.fromTo(
+      "#s4-headline",
+      { opacity: 0.18, filter: "blur(10px)", y: 18 },
+      { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.46, ease: "power4.out" },
+      0,
+    );
+    tl.fromTo(
+      "#s4-file .file-card",
+      { opacity: 0, scale: 0.86, filter: "blur(12px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.62, ease: "back.out(1.18)" },
+      0,
+    );
+    tl.fromTo(
+      "#s4-links path",
+      { opacity: 0, strokeDashoffset: 54 },
+      { opacity: 1, strokeDashoffset: 0, duration: 0.65, stagger: 0.12, ease: "power2.out" },
+      0.34,
+    );
+    // beat-grid: readable labels at global 13.64s, 14.73s and 15.84s.
+    tl.fromTo(
+      "#s4-architecture",
+      { opacity: 0, x: -26, filter: "blur(6px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.4, ease: "power4.out" },
+      0.53,
+    );
+    tl.fromTo(
+      "#s4-impact",
+      { opacity: 0, x: 26, filter: "blur(6px)" },
+      { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.4, ease: "power4.out" },
+      1.62,
+    );
+    tl.fromTo(
+      "#s4-recovery",
+      { opacity: 0, y: 22, filter: "blur(6px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power4.out" },
+      2.73,
+    );
+    // Local analysis peak RMS=0.7813: finite border/glow lift, capped well below a pulse.
+    tl.to(
+      "#s4-file .file-card",
+      { boxShadow: "0 0 64px rgba(115,230,181,0.242), 0 30px 80px rgba(0,0,0,0.36)", duration: 0.72, ease: "power2.inOut" },
+      3.08,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["one-file"] = tl;
+  </script>
+</template>

@@ -1,10 +1,17 @@
-# Rehearse
+# Restore Rehearsal — Local Project Brain and Backup Restore Testing
 
-**Rehearse recovery before production, and give people and AI agents a local evidence graph of the
-whole project.**
+**Test whether backups restore before production, and give people and AI agents a private evidence
+graph of the whole project.**
 
-Rehearse is an Apache-2.0, local-first command-line application for any software or digital project.
-It combines four related capabilities:
+[Website](https://someone006.github.io/Restore-Rehearsal/) ·
+[Launch video](https://someone006.github.io/Restore-Rehearsal/#launch-film) ·
+[Documentation](https://someone006.github.io/Restore-Rehearsal/project-brain/) ·
+[v0.3.0 release](https://github.com/Someone006/Restore-Rehearsal/releases/tag/v0.3.0) ·
+[Security](SECURITY.md) · [Apache-2.0 license](LICENSE)
+
+Rehearse is an Apache-2.0, local-first command-line application for backup restore testing,
+disaster-recovery drills, and codebase knowledge graphs across any software or digital project. It
+combines four related capabilities:
 
 - **Project Brain** statically scans a Git or ordinary local folder and keeps architecture,
   dependencies, tests, deployment, recovery evidence, findings, decisions, failed attempts, and

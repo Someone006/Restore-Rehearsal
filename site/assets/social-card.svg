@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Restore Rehearsal</title>
+  <desc id="description">Test backups before production and give people and AI agents a private local project brain.</desc>
+  <defs>
+    <radialGradient id="glow" cx="82%" cy="8%" r="75%">
+      <stop offset="0" stop-color="#245f4d"/>
+      <stop offset="1" stop-color="#07110f"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="72" y="66" width="1056" height="498" rx="34" fill="#0d1b18" stroke="#365d53" stroke-width="2"/>
+  <circle cx="130" cy="132" r="22" fill="#73e6b5"/>
+  <path d="M119 121h15c7 0 11 4 11 9 0 4-2 7-6 8l8 10h-12l-6-9v9h-10v-27Zm10 8v4h5c2 0 2-1 2-2 0-2 0-2-2-2h-5Z" fill="#092019"/>
+  <text x="172" y="143" fill="#b8cbc5" font-family="system-ui, sans-serif" font-size="28" font-weight="700" letter-spacing="2">OPEN SOURCE · LOCAL FIRST</text>
+  <text x="112" y="267" fill="#f3f8f6" font-family="system-ui, sans-serif" font-size="78" font-weight="800" letter-spacing="-3">Restore Rehearsal</text>
+  <text x="112" y="340" fill="#73e6b5" font-family="system-ui, sans-serif" font-size="42" font-weight="700">Test backups before production.</text>
+  <text x="112" y="407" fill="#b8cbc5" font-family="system-ui, sans-serif" font-size="31">One private project brain for people and AI agents.</text>
+  <rect x="112" y="470" width="218" height="54" rx="27" fill="#73e6b5"/>
+  <text x="149" y="506" fill="#092019" font-family="system-ui, sans-serif" font-size="25" font-weight="800">Apache-2.0</text>
+  <text x="360" y="506" fill="#ffd38a" font-family="system-ui, sans-serif" font-size="25" font-weight="700">v0.3.0 alpha</text>
+</svg>

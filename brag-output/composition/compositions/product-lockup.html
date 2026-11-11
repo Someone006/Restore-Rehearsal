@@ -1,0 +1,170 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 32%, rgba(115, 230, 181, 0.2), transparent 34%),
+        #07110f;
+      color: #f3f8f6;
+      font-family: Inter, sans-serif;
+    }
+
+    #s5-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 980px;
+      height: 980px;
+      margin-top: -490px;
+      margin-left: -490px;
+      border: 2px solid rgba(115, 230, 181, 0.13);
+      border-radius: 50%;
+    }
+
+    #s5-line1,
+    #s5-line2 {
+      position: absolute;
+      left: 120px;
+      right: 120px;
+      height: 138px;
+      text-align: center;
+    }
+
+    #s5-line1 {
+      top: 190px;
+    }
+
+    #s5-line2 {
+      top: 330px;
+    }
+
+    #s5-line1 .anim,
+    #s5-line2 .anim {
+      font-size: 103px;
+      font-weight: 900;
+      letter-spacing: -0.052em;
+      line-height: 1.05;
+    }
+
+    #s5-line2 .anim {
+      color: #73e6b5;
+    }
+
+    #s5-product {
+      position: absolute;
+      top: 550px;
+      left: 310px;
+      width: 1300px;
+      height: 230px;
+    }
+
+    #s5-product .lockup {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: 126px 1fr;
+      align-items: center;
+      gap: 34px;
+      padding: 36px 54px;
+      border: 2px solid #29453f;
+      border-radius: 30px;
+      background: rgba(13, 27, 24, 0.94);
+      box-shadow: 0 24px 72px rgba(0, 0, 0, 0.34);
+    }
+
+    #s5-product .mark {
+      display: grid;
+      width: 112px;
+      height: 112px;
+      place-items: center;
+      border: 3px solid #73e6b5;
+      border-radius: 30px;
+      color: #73e6b5;
+      font-size: 68px;
+      font-weight: 700;
+    }
+
+    #s5-product .name {
+      color: #f3f8f6;
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    #s5-product .url {
+      margin-top: 16px;
+      color: #b8cbc5;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 29px;
+    }
+
+    #s5-license {
+      position: absolute;
+      left: 120px;
+      bottom: 106px;
+      color: #a1f2cf;
+      font-size: 29px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    #s5-credit {
+      position: absolute;
+      right: 120px;
+      bottom: 106px;
+      color: #b8cbc5;
+      font-size: 29px;
+      text-align: right;
+    }
+  </style>
+  <div id="root" data-composition-id="product-lockup" data-width="1920" data-height="1080">
+    <div id="s5-ring" data-layout-ignore></div>
+    <div id="s5-line1" class="clip" data-start="0" data-duration="5.46" data-track-index="1">
+      <div class="anim">Know your project.</div>
+    </div>
+    <div id="s5-line2" class="clip" data-start="0.82" data-duration="4.64" data-track-index="2">
+      <div class="anim">Prove it can recover.</div>
+    </div>
+    <div id="s5-product" class="clip" data-start="1.88" data-duration="3.58" data-track-index="3">
+      <div class="lockup">
+        <span class="mark" aria-hidden="true">↻</span>
+        <div><div class="name">Restore Rehearsal</div><div class="url">github.com/Someone006/Restore-Rehearsal</div></div>
+      </div>
+    </div>
+    <div id="s5-license">OPEN SOURCE · LOCAL FIRST · APACHE-2.0</div>
+    <div id="s5-credit">Music: Sascha Ende · ende.app · CC BY 4.0</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // beat-locked: final statement lands at global 17.47s.
+    tl.fromTo(
+      "#s5-line1 .anim",
+      { opacity: 0.15, filter: "blur(12px)", y: 24 },
+      { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.58, ease: "power4.out" },
+      0,
+    );
+    tl.fromTo(
+      "#s5-line2 .anim",
+      { opacity: 0, filter: "blur(12px)", y: 24 },
+      { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.56, ease: "power4.out" },
+      0.82,
+    );
+    tl.fromTo(
+      "#s5-product .lockup",
+      { opacity: 0, scale: 0.92, filter: "blur(10px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.58, ease: "back.out(1.16)" },
+      1.88,
+    );
+    // Local analysis peak treble=0.8875: one finite glow lift on the brand mark.
+    tl.to(
+      "#s5-product .mark",
+      { textShadow: "0 0 28px rgba(115,230,181,0.355)", duration: 0.48, ease: "power2.out" },
+      2.34,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["product-lockup"] = tl;
+  </script>
+</template>

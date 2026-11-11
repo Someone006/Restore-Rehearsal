@@ -1,0 +1,280 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 64% 64%, rgba(115, 230, 181, 0.12), transparent 34%),
+        #07110f;
+      color: #f3f8f6;
+      font-family: Inter, sans-serif;
+    }
+
+    #s2-grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(115, 230, 181, 0.18) 1.5px, transparent 1.5px);
+      background-size: 38px 38px;
+      opacity: 0.28;
+    }
+
+    #s2-title {
+      position: absolute;
+      top: 76px;
+      left: 110px;
+      color: #73e6b5;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    #s2-terminal {
+      position: absolute;
+      top: 140px;
+      left: 110px;
+      width: 1700px;
+      height: 190px;
+    }
+
+    #s2-terminal .panel {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border: 2px solid #29453f;
+      border-radius: 24px;
+      background: #0b1815;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.3);
+    }
+
+    #s2-terminal .bar {
+      display: flex;
+      height: 48px;
+      align-items: center;
+      gap: 9px;
+      padding-inline: 22px;
+      border-bottom: 1px solid #29453f;
+    }
+
+    #s2-terminal .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #45665e;
+    }
+
+    #s2-terminal .command,
+    #s2-terminal .result {
+      position: absolute;
+      left: 34px;
+      font-family: "IBM Plex Mono", monospace;
+      white-space: nowrap;
+    }
+
+    #s2-terminal .command {
+      top: 76px;
+      color: #f3f8f6;
+      font-size: 33px;
+      font-weight: 700;
+    }
+
+    #s2-terminal .prompt {
+      margin-right: 16px;
+      color: #73e6b5;
+    }
+
+    #s2-terminal .result {
+      top: 128px;
+      color: #b8cbc5;
+      font-size: 29px;
+    }
+
+    #s2-graph {
+      position: absolute;
+      top: 350px;
+      left: 230px;
+      width: 1460px;
+      height: 620px;
+    }
+
+    #s2-graph .graph-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #s2-graph .halo {
+      position: absolute;
+      left: 470px;
+      top: 75px;
+      width: 520px;
+      height: 450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(115, 230, 181, 0.2), transparent 68%);
+      opacity: 0.16;
+    }
+
+    #s2-links {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    #s2-links line {
+      stroke: #4a796d;
+      stroke-width: 3;
+      stroke-dasharray: 12 10;
+    }
+
+    .s2-node {
+      position: absolute;
+      display: flex;
+      width: 245px;
+      min-height: 116px;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #29453f;
+      border-radius: 22px;
+      background: #122521;
+      color: #f3f8f6;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    #s2-project {
+      left: 608px;
+      top: 238px;
+      border-color: #73e6b5;
+      background: #15352d;
+      color: #a1f2cf;
+      font-size: 32px;
+    }
+
+    #s2-source {
+      left: 94px;
+      top: 74px;
+    }
+
+    #s2-tests {
+      left: 94px;
+      top: 414px;
+    }
+
+    #s2-deploy {
+      right: 94px;
+      top: 74px;
+    }
+
+    #s2-recovery {
+      right: 94px;
+      top: 414px;
+      border-color: #528c7d;
+    }
+
+    #s2-note {
+      position: absolute;
+      right: 110px;
+      bottom: 58px;
+      color: #b8cbc5;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 29px;
+      letter-spacing: 0.03em;
+    }
+  </style>
+  <div id="root" data-composition-id="project-brain" data-width="1920" data-height="1080">
+    <div id="s2-grid" data-layout-ignore></div>
+    <div id="s2-title">01 · Build the private Project Brain</div>
+    <div id="s2-terminal" class="clip" data-start="0" data-duration="5.47" data-track-index="1">
+      <div class="panel">
+        <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="command"><span class="prompt">$</span>rehearse brain build . --output project.rrbrain</div>
+        <div class="result">✓ static scan complete · snapshot 1 · project.rrbrain</div>
+      </div>
+    </div>
+    <div id="s2-graph" class="clip" data-start="1.48" data-duration="3.99" data-track-index="2">
+      <div class="graph-shell">
+        <div class="halo" data-layout-ignore></div>
+        <svg id="s2-links" viewBox="0 0 1460 620" aria-hidden="true" data-layout-ignore>
+          <line id="s2-link-source" x1="730" y1="296" x2="216" y2="132"></line>
+          <line id="s2-link-tests" x1="730" y1="296" x2="216" y2="472"></line>
+          <line id="s2-link-deploy" x1="730" y1="296" x2="1244" y2="132"></line>
+          <line id="s2-link-recovery" x1="730" y1="296" x2="1244" y2="472"></line>
+        </svg>
+        <div id="s2-project" class="s2-node">PROJECT</div>
+        <div id="s2-source" class="s2-node">SOURCE</div>
+        <div id="s2-tests" class="s2-node">TESTS</div>
+        <div id="s2-deploy" class="s2-node">DEPLOY</div>
+        <div id="s2-recovery" class="s2-node">RECOVERY</div>
+      </div>
+    </div>
+    <div id="s2-note">STATIC SCAN · NO EXECUTION · GIT OPTIONAL</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      "#s2-terminal .panel",
+      { opacity: 0.25, y: 20, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.48, ease: "power4.out" },
+      0,
+    );
+    tl.fromTo(
+      "#s2-terminal .command",
+      { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.92, ease: "power2.inOut" },
+      0.28,
+    );
+    tl.fromTo(
+      "#s2-terminal .result",
+      { opacity: 0, y: 8 },
+      { opacity: 1, y: 0, duration: 0.24, ease: "power3.out" },
+      1.12,
+    );
+    tl.fromTo(
+      "#s2-graph .graph-shell",
+      { opacity: 0, filter: "blur(8px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" },
+      1.48,
+    );
+    tl.fromTo(
+      "#s2-links line",
+      { opacity: 0, strokeDashoffset: 44 },
+      { opacity: 1, strokeDashoffset: 0, duration: 0.7, stagger: 0.08, ease: "power2.out" },
+      1.7,
+    );
+    tl.fromTo(
+      "#s2-project",
+      { opacity: 0, scale: 0.88, filter: "blur(6px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.48, ease: "back.out(1.2)" },
+      1.85,
+    );
+    // beat-grid: paired readable arrivals at global 5.34s and 6.56s.
+    tl.fromTo(
+      ["#s2-source", "#s2-deploy"],
+      { opacity: 0, y: 24, filter: "blur(7px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.46, stagger: 0.08, ease: "power4.out" },
+      2.07,
+    );
+    tl.fromTo(
+      ["#s2-tests", "#s2-recovery"],
+      { opacity: 0, y: 24, filter: "blur(7px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.46, stagger: 0.08, ease: "power4.out" },
+      3.29,
+    );
+    // Local audio analysis peak bass=0.54: finite 4.3% presence lift, not a playback loop.
+    tl.fromTo(
+      "#s2-graph .halo",
+      { opacity: 0.16, scale: 0.98 },
+      { opacity: 0.203, scale: 1.023, duration: 0.72, ease: "power2.inOut" },
+      4.1,
+    );
+    window.__timelines = window.__timelines || {};
+    window.__timelines["project-brain"] = tl;
+  </script>
+</template>
