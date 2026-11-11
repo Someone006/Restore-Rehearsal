@@ -115,6 +115,22 @@ def test_pages_have_unique_search_and_social_metadata_without_remote_runtime_ass
                 assert not asset.startswith(("http://", "https://", "//"))
 
         assert all(script_type == "application/ld+json" for script_type in parser.script_types)
+        structured_data = [
+            json.loads(match)
+            for match in re.findall(
+                r'<script type="application/ld\+json">\s*(.*?)\s*</script>',
+                source,
+                re.DOTALL,
+            )
+        ]
+        assert len(structured_data) == 1
+        assert all(data["@context"] == "https://schema.org" for data in structured_data)
+        if relative != "index.html":
+            entity_types = {
+                entity["@type"]
+                for entity in structured_data[0]["@graph"]
+            }
+            assert {"WebPage", "SoftwareApplication", "BreadcrumbList"} <= entity_types
 
     assert len(titles) == len(PAGES)
     assert len(descriptions) == len(PAGES)
@@ -147,7 +163,12 @@ def test_home_structured_data_is_valid_and_truthful() -> None:
     data = json.loads(match.group(1))
     assert data["@context"] == "https://schema.org"
     entities = {item["@type"]: item for item in data["@graph"]}
-    assert set(entities) == {"SoftwareSourceCode", "SoftwareApplication"}
+    assert set(entities) == {
+        "SoftwareSourceCode",
+        "SoftwareApplication",
+        "WebSite",
+        "FAQPage",
+    }
     assert entities["SoftwareSourceCode"]["codeRepository"] == (
         "https://github.com/Someone006/Restore-Rehearsal"
     )

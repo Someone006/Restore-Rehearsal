@@ -8,11 +8,13 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; media-src 'self'; style-src 'self'; script-src 'none'; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <title>Restore Rehearsal — Test Backups Before Production</title>
+    <meta name="author" content="Restore Rehearsal contributors">
     <meta name="description" content="Open-source backup restore testing and a private local project brain for disaster recovery, architecture graphs, change impact, and AI agent workflows.">
     <link rel="canonical" href="https://someone006.github.io/Restore-Rehearsal/">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="assets/site.css">
     <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
     <meta property="og:site_name" content="Restore Rehearsal">
     <meta property="og:title" content="Restore Rehearsal — Test Backups Before Production">
     <meta property="og:description" content="Open-source backup restore testing and a private local project brain for people and AI agents.">
@@ -58,6 +60,56 @@
               "price": "0",
               "priceCurrency": "USD"
             }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://someone006.github.io/Restore-Rehearsal/#website",
+            "url": "https://someone006.github.io/Restore-Rehearsal/",
+            "name": "Restore Rehearsal",
+            "description": "Open-source backup restore testing and a private local project brain.",
+            "publisher": {
+              "@id": "https://someone006.github.io/Restore-Rehearsal/#source"
+            },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://someone006.github.io/Restore-Rehearsal/#faq",
+            "url": "https://someone006.github.io/Restore-Rehearsal/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Does Project Brain require a Git repository?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. It can statically scan a Git work tree or an ordinary local folder. Git-aware ignore behavior is used when Git is present."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does the project scan execute my code?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Project Brain performs a bounded static scan. Restore drills execute only reviewed commands declared in a recipe inside a disposable Docker Compose environment."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is Restore Rehearsal backup software?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. It does not create or replace backups. It tests a declared backup and recovery path so that the existence of a backup is not mistaken for evidence that recovery works."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can companies use it?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Apache-2.0 permits commercial use. The current release is alpha and should be treated as an advisory tool with human review."
+                }
+              }
+            ]
           }
         ]
       }
