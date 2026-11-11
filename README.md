@@ -3,11 +3,19 @@
 **Test whether backups restore before production, and give people and AI agents a private evidence
 graph of the whole project.**
 
+[![CI](https://github.com/Someone006/Restore-Rehearsal/actions/workflows/ci.yml/badge.svg)](https://github.com/Someone006/Restore-Rehearsal/actions/workflows/ci.yml)
+[![Pages](https://github.com/Someone006/Restore-Rehearsal/actions/workflows/pages.yml/badge.svg)](https://github.com/Someone006/Restore-Rehearsal/actions/workflows/pages.yml)
+[![Latest release](https://img.shields.io/github/v/release/Someone006/Restore-Rehearsal?display_name=tag&sort=semver)](https://github.com/Someone006/Restore-Rehearsal/releases)
+[![License](https://img.shields.io/github/license/Someone006/Restore-Rehearsal)](LICENSE)
+
 [Website](https://someone006.github.io/Restore-Rehearsal/) ·
 [Launch video](https://someone006.github.io/Restore-Rehearsal/#launch-film) ·
 [Documentation](https://someone006.github.io/Restore-Rehearsal/project-brain/) ·
 [v0.3.0 release](https://github.com/Someone006/Restore-Rehearsal/releases/tag/v0.3.0) ·
 [Security](SECURITY.md) · [Apache-2.0 license](LICENSE)
+
+**Start here:** [try the synthetic restore rehearsal](examples/minimal/) ·
+[build a Project Brain](docs/brain.md) · [install the Agent Skills](#install-as-ai-agent-skills)
 
 Rehearse is an Apache-2.0, local-first command-line application for backup restore testing,
 disaster-recovery drills, and codebase knowledge graphs across any software or digital project. It
