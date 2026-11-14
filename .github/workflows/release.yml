@@ -11,7 +11,7 @@ on:
         required: true
         type: string
       publish_github:
-        description: Create or repair the GitHub prerelease after all build and attestation jobs pass
+        description: Create or repair the GitHub release after all build and attestation jobs pass
         required: true
         default: false
         type: boolean
@@ -128,7 +128,7 @@ jobs:
           subject-path: release/*
 
   github-release:
-    name: Publish GitHub prerelease
+    name: Publish GitHub release
     needs: [build, attest]
     if: >-
       startsWith(needs.build.outputs.tag, 'v') &&
@@ -145,14 +145,14 @@ jobs:
           name: release-${{ needs.build.outputs.version }}
           path: release
 
-      - name: Create or update the prerelease
+      - name: Create or update the release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.build.outputs.tag }}
         shell: bash
         run: |
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --verify-tag --prerelease --generate-notes
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --verify-tag --generate-notes
           gh release upload "$TAG" release/* --clobber
 
   pypi:
